@@ -535,7 +535,73 @@ w.learned:hover { background: rgba(45,106,79,0.2); }
 .activity-chars { color: var(--ink3); font-size: 11px; }
 .activity-date { color: var(--ink3); font-size: 11px; white-space: nowrap; }
 
-/* ─── EMPTY STATE ─── */
+/* ─── WORD STEP FLOW ─── */
+.word-steps {
+  display: flex; align-items: center; gap: 2px;
+  padding: 10px 16px 8px; flex-wrap: wrap;
+  border-bottom: 1px solid var(--border); margin-bottom: 0;
+}
+.word-step {
+  font-size: 11px; padding: 3px 8px; border-radius: 20px;
+  background: var(--paper2); color: var(--ink3); border: 1px solid var(--border);
+}
+.word-step.active { background: var(--ink); color: var(--paper); border-color: var(--ink); font-weight: 500; }
+.word-step.done { background: var(--green-light); color: var(--green); border-color: rgba(45,106,79,0.2); }
+.step-arrow { font-size: 12px; color: var(--ink3); }
+
+.step-intro { margin-bottom: 12px; }
+.step-intro-title { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
+.step-intro-desc { font-size: 13px; color: var(--ink2); line-height: 1.6; }
+.struct-tag { font-size: 11px; background: var(--gold-light); color: var(--gold); padding: 1px 6px; border-radius: 3px; }
+
+.step-hint {
+  font-size: 12px; color: var(--ink3); background: var(--paper2);
+  padding: 8px 10px; border-radius: 6px; margin-bottom: 8px; line-height: 1.6;
+}
+.step-textarea {
+  width: 100%; padding: 10px 12px; font-family: var(--serif); font-size: 14px;
+  line-height: 1.8; border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--paper); color: var(--ink); resize: vertical; min-height: 70px;
+  outline: none; transition: border-color 0.15s;
+}
+.step-textarea:focus { border-color: var(--gold); }
+.step-feedback { font-size: 13px; padding: 8px 10px; border-radius: 6px; margin-top: 6px; line-height: 1.6; }
+.step-feedback.ok { background: var(--green-light); color: var(--green); }
+.step-feedback.warn { background: var(--gold-light); color: var(--gold); }
+.step-next-btn {
+  width: 100%; margin-top: 10px; padding: 9px;
+  background: var(--ink); color: var(--paper); border: none;
+  border-radius: var(--radius); font-size: 13px; font-family: var(--sans);
+  cursor: pointer; font-weight: 500; transition: background 0.15s;
+}
+.step-next-btn:hover { background: var(--ink2); }
+
+.contrast-item {
+  background: var(--paper2); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 10px 12px; margin-bottom: 8px;
+}
+.contrast-sent { font-family: var(--serif); font-size: 14px; line-height: 1.8; color: var(--ink); margin-bottom: 6px; }
+.contrast-note-wrap { margin-top: 6px; }
+.contrast-note { font-size: 12px; color: var(--ink2); line-height: 1.6; padding: 6px 8px; background: var(--paper); border-radius: 4px; border-left: 3px solid var(--gold); }
+.contrast-reveal-btn {
+  font-size: 11px; padding: 3px 10px; border-radius: 20px;
+  background: transparent; border: 1px solid var(--border);
+  color: var(--ink3); cursor: pointer; font-family: var(--sans);
+}
+.contrast-reveal-btn:hover { background: var(--paper3); color: var(--ink); }
+
+.prev-sentence {
+  font-family: var(--serif); font-size: 13px; color: var(--ink2);
+  background: var(--paper2); border-left: 3px solid var(--gold);
+  padding: 8px 10px; border-radius: 0 var(--radius) var(--radius) 0;
+  margin-bottom: 10px; line-height: 1.7;
+}
+.step-complete { margin-top: 12px; text-align: center; }
+.complete-msg {
+  font-size: 14px; color: var(--green); font-weight: 500;
+  padding: 10px; background: var(--green-light);
+  border-radius: var(--radius); margin-bottom: 8px;
+}
 .empty-word { text-align: center; padding: 40px 20px; color: var(--ink3); }
 .empty-word-char { font-family: var(--serif); font-size: 48px; color: var(--paper3); margin-bottom: 12px; }
 
@@ -1459,38 +1525,223 @@ function showWord(wid) {
   const wordData = currentArticle.words[wid];
   if (!wordData) return;
   currentWord = wid;
+  renderWordStep(wid, wordData, 1, {});
+}
+
+function renderWordStep(wid, wordData, step, answers) {
   const wordKey = currentArticle.id + '_' + wid;
   const isLearned = !!learnedWords[wordKey];
   const progress = getSRSProgress(wordKey);
+  const barColor = progress > 66 ? 'var(--green)' : progress > 33 ? 'var(--gold)' : '#c0392b';
   const nextReview = getNextReview(wordKey);
-  const srsLabel = nextReview ? `下次复习：${formatDate(nextReview)}` : '尚未加入复习';
+  const srsLabel = nextReview ? `下次复习：${formatDate(nextReview)}` : '点击加入复习';
 
-  const contextsHtml = wordData.contexts.map(c => `
-    <div class="word-context-item">
-      <div class="word-context-text">${c.text}</div>
-      <div class="word-context-src">${c.src}</div>
-    </div>
-  `).join('');
+  // Step indicator
+  const steps = ['释义', '对比', '造句', '扩写'];
+  const stepsHtml = steps.map((s,i) => `
+    <span class="word-step ${i+1 === step ? 'active' : i+1 < step ? 'done' : ''}">
+      ${i+1 < step ? '✓' : i+1} ${s}
+    </span>`).join('<span class="step-arrow">›</span>');
 
-  const barColor = progress > 66 ? '#2d6a4f' : progress > 33 ? '#b8860b' : '#c0392b';
+  // Step content
+  let bodyHtml = '';
 
-  document.getElementById('right-content').innerHTML = `
-    <div class="word-card">
+  if (step === 1) {
+    // ── 步骤1：释义 + 多语境 ──
+    const contextsHtml = wordData.contexts.map(c => `
+      <div class="word-context-item">
+        <div class="word-context-text">${c.text}</div>
+        <div class="word-context-src">${c.src}</div>
+      </div>`).join('');
+    bodyHtml = `
       <div class="word-main">${wordData.word}</div>
       <div class="word-pinyin">${wordData.pinyin}</div>
       <div class="word-def">${wordData.def}</div>
       <div class="word-contexts-title">在不同语境中的使用</div>
       ${contextsHtml}
-      <div class="srs-info">
+      <button class="step-next-btn" onclick="renderWordStep('${wid}', currentArticle.words['${wid}'], 2, {})">
+        下一步：对比练习 →
+      </button>`;
+
+  } else if (step === 2) {
+    // ── 步骤2：对比学习 ──
+    const contrasts = getContrastSentences(wordData.word);
+    const itemsHtml = contrasts.map((c,i) => `
+      <div class="contrast-item">
+        <div class="contrast-sent">${c.sent}</div>
+        <div class="contrast-note-wrap" id="cnote-${i}" style="display:none;">
+          <div class="contrast-note">${c.note}</div>
+        </div>
+        <button class="contrast-reveal-btn" onclick="
+          document.getElementById('cnote-${i}').style.display='block';
+          this.style.display='none';
+        ">看分析</button>
+      </div>`).join('');
+    bodyHtml = `
+      <div class="step-intro">
+        <div class="step-intro-title">🔍 对比感受</div>
+        <div class="step-intro-desc">下面三句话描述相似的情景，但用词不同。感受一下，哪里不一样？</div>
+      </div>
+      ${itemsHtml}
+      <button class="step-next-btn" onclick="renderWordStep('${wid}', currentArticle.words['${wid}'], 3, {})">
+        下一步：我来造句 →
+      </button>`;
+
+  } else if (step === 3) {
+    // ── 步骤3：造句 ──
+    bodyHtml = `
+      <div class="step-intro">
+        <div class="step-intro-title">✍️ 造句练习</div>
+        <div class="step-intro-desc">用「<strong>${wordData.word}</strong>」写一个句子，描述一个你亲身经历的场景。</div>
+      </div>
+      <div class="step-hint">💡 提示：先想一个场景（教室、操场、家里……），再把「${wordData.word}」放进去</div>
+      <textarea class="step-textarea" id="step3-input" placeholder="写下你的句子…" oninput="checkStep3('${wid}')"></textarea>
+      <div id="step3-feedback" class="step-feedback" style="display:none;"></div>
+      <button class="step-next-btn" id="step3-next" style="display:none;"
+        onclick="renderWordStep('${wid}', currentArticle.words['${wid}'], 4, {sentence: document.getElementById('step3-input').value})">
+        下一步：扩写成段落 →
+      </button>`;
+
+  } else if (step === 4) {
+    // ── 步骤4：扩写段落 ──
+    const prevSent = answers.sentence || '';
+    bodyHtml = `
+      <div class="step-intro">
+        <div class="step-intro-title">🧩 扩写成段落</div>
+        <div class="step-intro-desc">把你刚才的句子扩写成一个小段落（40-80字）。<br>
+        结构建议：<span class="struct-tag">场景描写</span> → <span class="struct-tag">感官细节</span> → <span class="struct-tag">情感/感受</span></div>
+      </div>
+      ${prevSent ? `<div class="prev-sentence">你的句子：「${prevSent}」</div>` : ''}
+      <textarea class="step-textarea" id="step4-input" placeholder="在这里扩写…" style="min-height:90px;" oninput="checkStep4('${wid}','${wordData.word}')"></textarea>
+      <div id="step4-chars" style="font-size:11px;color:var(--ink3);text-align:right;margin-top:4px;">0 字</div>
+      <div id="step4-feedback" class="step-feedback" style="display:none;"></div>
+      <div class="step-complete" id="step4-complete" style="display:none;">
+        <div class="complete-msg">✨ 完成！词汇已加入复习库</div>
+        <button class="step-next-btn" onclick="switchTab('practice')">去完整仿写 →</button>
+        <button class="step-next-btn" style="background:transparent;color:var(--ink2);border:1px solid var(--border);margin-top:6px;" onclick="showWordDefault()">继续阅读</button>
+      </div>`;
+  }
+
+  // SRS bar (always shown at bottom)
+  const srsHtml = `
+    <div class="srs-info" style="margin-top:16px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
         <div class="srs-label">${srsLabel}</div>
-        <div class="srs-bar-wrap"><div class="srs-bar" style="width:${progress}%;background:${barColor}"></div></div>
         <button class="mark-btn ${isLearned ? 'marked' : ''}" onclick="toggleLearned('${wordKey}','${wid}')" id="mark-btn-${wordKey}">
-          ${isLearned ? '✓ 已掌握' : '加入复习'}
+          ${isLearned ? '✓ 已加入' : '加入复习'}
         </button>
       </div>
-    </div>
-    <button class="submit-btn" style="margin-top:8px;" onclick="switchTab('practice')">去仿写练习 →</button>
-  `;
+      <div class="srs-bar-wrap"><div class="srs-bar" style="width:${progress}%;background:${barColor}"></div></div>
+    </div>`;
+
+  document.getElementById('right-content').innerHTML = `
+    <div class="word-steps">${stepsHtml}</div>
+    <div class="word-card">${bodyHtml}${srsHtml}</div>`;
+}
+
+function checkStep3(wid) {
+  const text = document.getElementById('step3-input').value.trim();
+  const wordData = currentArticle.words[wid];
+  const fb = document.getElementById('step3-feedback');
+  const nextBtn = document.getElementById('step3-next');
+  if (text.length < 8) { fb.style.display = 'none'; nextBtn.style.display = 'none'; return; }
+
+  const usedWord = text.includes(wordData.word.replace(/（.*）/,'').replace(/\(.*\)/,''));
+  fb.style.display = 'block';
+  if (usedWord && text.length >= 10) {
+    fb.className = 'step-feedback ok';
+    fb.innerHTML = '✅ 用上了！句子有场景感，可以继续扩写。';
+    nextBtn.style.display = 'block';
+  } else if (!usedWord) {
+    fb.className = 'step-feedback warn';
+    fb.innerHTML = `💡 记得把「${wordData.word}」放进句子里。`;
+    nextBtn.style.display = 'none';
+  } else {
+    fb.className = 'step-feedback ok';
+    fb.innerHTML = '写好了就可以继续！';
+    nextBtn.style.display = 'block';
+  }
+}
+
+function checkStep4(wid, word) {
+  const text = document.getElementById('step4-input').value.trim();
+  const chars = document.getElementById('step4-chars');
+  const fb = document.getElementById('step4-feedback');
+  const complete = document.getElementById('step4-complete');
+  chars.textContent = text.length + ' 字';
+
+  if (text.length < 20) { fb.style.display='none'; complete.style.display='none'; return; }
+
+  fb.style.display = 'block';
+  const wordKey = currentArticle.id + '_' + wid;
+  if (text.length >= 40) {
+    fb.className = 'step-feedback ok';
+    fb.innerHTML = text.length >= 60
+      ? '✅ 段落丰富！有场景、有细节，很好。'
+      : '📝 继续扩展，加一句感受或细节会更好。';
+    // Auto mark learned and show complete
+    if (!learnedWords[wordKey]) markLearned(wordKey);
+    complete.style.display = 'block';
+  } else {
+    fb.className = 'step-feedback warn';
+    fb.innerHTML = '再多写一点，把场景说清楚。';
+    complete.style.display = 'none';
+  }
+}
+
+// Generate contrast sentences based on word
+function getContrastSentences(word) {
+  const map = {
+    '欣欣然': [
+      { sent: '一切都像刚睡醒的样子，<b>欣欣然</b>张开了眼。', note: '拟人手法，"欣欣然"赋予自然以喜悦的情态，语气舒缓而充满生机。' },
+      { sent: '一切都像刚睡醒的样子，<b>高兴地</b>张开了眼。', note: '"高兴地"太直白，缺少古典韵味，没有"欣欣然"那种文言节奏感。' },
+      { sent: '一切都像刚睡醒的样子，<b>慢慢地</b>张开了眼。', note: '"慢慢地"只写速度，没有情感色彩，读来平淡，无法传递春天的喜悦。' },
+    ],
+    '朗润': [
+      { sent: '山<b>朗润</b>起来了，水涨起来了，太阳的脸红起来了。', note: '"朗润"一词兼写明亮与滋润，色感和质感都有，极简而丰富。' },
+      { sent: '山<b>变绿</b>了，水涨起来了，太阳的脸红起来了。', note: '"变绿"只有颜色，缺少"朗润"那种"光泽"感，画面不够立体。' },
+      { sent: '山<b>清晰</b>起来了，水涨起来了，太阳的脸红起来了。', note: '"清晰"是视觉上的清楚，但没有"朗润"的生命感和湿润气息。' },
+    ],
+    '偷偷地': [
+      { sent: '小草<b>偷偷地</b>从土里钻出来，嫩嫩的，绿绿的。', note: '"偷偷地"是拟人，像调皮的孩子悄悄探出头，充满童趣和生命力。' },
+      { sent: '小草<b>悄悄地</b>从土里钻出来，嫩嫩的，绿绿的。', note: '"悄悄地"也有"不被察觉"之意，但少了"偷偷"那种顽皮感，稍显平淡。' },
+      { sent: '小草<b>慢慢地</b>从土里钻出来，嫩嫩的，绿绿的。', note: '"慢慢地"只写速度，没有拟人色彩，失去了原句的生动与趣味。' },
+    ],
+    '忐忑不安': [
+      { sent: '她的心<b>忐忑不安</b>地跳动着，不知道该怎么办。', note: '"忐忑不安"形象地写出心理的起伏不定，像心跳一上一下，节奏感强。' },
+      { sent: '她的心<b>很紧张</b>地跳动着，不知道该怎么办。', note: '"很紧张"太笼统，只是程度副词，缺少"忐忑"那种上下摇摆的具体感受。' },
+      { sent: '她<b>担心</b>地看着门口，不知道该怎么办。', note: '"担心"是情绪标签，直接告知读者，但"忐忑不安"让读者自己感受到那种不安。' },
+    ],
+    '蹒跚': [
+      { sent: '父亲<b>蹒跚</b>地走到铁道边，慢慢探身下去。', note: '"蹒跚"一词同时写出了速度慢、步伐不稳、身体费力三层意思，极度精准。' },
+      { sent: '父亲<b>缓缓地</b>走到铁道边，慢慢探身下去。', note: '"缓缓"只有速度慢，没有"蹒跚"那种腿脚不便、摇摆用力的形象。' },
+      { sent: '父亲<b>慢慢地</b>走到铁道边，慢慢探身下去。', note: '"慢慢"重复，且只写速度，读来平淡，无法让人感受到父亲的年迈与艰难。' },
+    ],
+    '妒忌': [
+      { sent: '周瑜看到诸葛亮挺有才干，心里很<b>妒忌</b>。', note: '"妒忌"精准点出周瑜的心理根源，既有嫉恨，又有不甘，一词揭示人物性格。' },
+      { sent: '周瑜看到诸葛亮挺有才干，心里很<b>不高兴</b>。', note: '"不高兴"太模糊，可能因为很多原因，无法像"妒忌"那样精准指向心理动机。' },
+      { sent: '周瑜看到诸葛亮挺有才干，心里很<b>生气</b>。', note: '"生气"是情绪的外在表现，"妒忌"则是深层的心理状态，前者浅，后者深。' },
+    ],
+    '俨然': [
+      { sent: '土地平旷，屋舍<b>俨然</b>，有良田、美池、桑竹之属。', note: '"俨然"一字，写出整齐有序的空间感，是典型白描：不加修辞，字字精准。' },
+      { sent: '土地平旷，屋舍<b>整整齐齐</b>，有良田、美池、桑竹之属。', note: '"整整齐齐"是口语叠词，虽然意思相近，但少了"俨然"的文言简洁之美。' },
+      { sent: '土地平旷，屋舍<b>排列有序</b>，有良田、美池、桑竹之属。', note: '"排列有序"是现代说明文用语，放入古文中显得突兀，破坏了原文的语言风格。' },
+    ],
+    '惆怅': [
+      { sent: '我<b>惆怅</b>地看着窗外，心里空空的。', note: '"惆怅"是文学化的情绪词，带有失落、若有所失的细腻感，比"失望"更有层次。' },
+      { sent: '我<b>失望</b>地看着窗外，心里空空的。', note: '"失望"更直接，但缺少"惆怅"那种无法言说的空洞感，情绪略显单薄。' },
+      { sent: '我<b>难过</b>地看着窗外，心里空空的。', note: '"难过"是通用情绪词，太宽泛，"惆怅"则更精准地指向一种"说不清的遗憾"。' },
+    ],
+  };
+  // Default fallback: use contexts as contrast
+  const baseWord = word.replace(/（.*）/,'').replace(/\(.*\)/,'');
+  if (map[baseWord]) return map[baseWord];
+  // Generic fallback
+  return [
+    { sent: `例句一：含有「${baseWord}」的典型用法。`, note: '这是最常见、最标准的用法，注意词语的情感色彩。' },
+    { sent: `例句二：用近义词替换「${baseWord}」的版本。`, note: '近义词虽然意思接近，但情感色彩或语气略有不同。' },
+    { sent: `例句三：删去「${baseWord}」的版本。`, note: '没有这个词，句子的表达力明显减弱，感受一下差距。' },
+  ];
 }
 
 function toggleLearned(wordKey, wid) {
