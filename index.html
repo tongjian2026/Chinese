@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>语文学堂 · 七年级</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;700&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1a1410;
+  --ink2: #4a3f35;
+  --ink3: #8a7a6e;
+  --paper: #faf8f4;
+  --paper2: #f2ede4;
+  --paper3: #e8e0d0;
+  --red: #c0392b;
+  --red-light: #fdf0ee;
+  --green: #2d6a4f;
+  --green-light: #eaf4ef;
+  --gold: #b8860b;
+  --gold-light: #fdf8e8;
+  --blue: #1a4a6b;
+  --blue-light: #eaf1f8;
+  --border: rgba(26,20,16,0.12);
+  --serif: 'Noto Serif SC', serif;
+  --sans: 'Noto Sans SC', sans-serif;
+  --radius: 8px;
+  --shadow: 0 2px 12px rgba(26,20,16,0.08);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--sans);
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── HEADER ─── */
+.header {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 0 32px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.header-brand {
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+.header-brand span { color: var(--gold); }
+.header-nav { display: flex; gap: 4px; }
+.nav-btn {
+  background: none;
+  border: none;
+  color: rgba(250,248,244,0.6);
+  font-family: var(--sans);
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.nav-btn:hover { color: var(--paper); background: rgba(255,255,255,0.08); }
+.nav-btn.active { color: var(--paper); background: rgba(255,255,255,0.14); }
+
+/* ─── API KEY BANNER ─── */
+.api-banner {
+  background: var(--gold-light);
+  border-bottom: 1px solid rgba(184,134,11,0.2);
+  padding: 10px 32px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--gold);
+}
+.api-banner input {
+  flex: 1;
+  max-width: 380px;
+  padding: 6px 10px;
+  border: 1px solid rgba(184,134,11,0.3);
+  border-radius: 4px;
+  font-size: 13px;
+  background: white;
+  color: var(--ink);
+  font-family: monospace;
+}
+.api-banner input:focus { outline: none; border-color: var(--gold); }
+.api-save-btn {
+  padding: 6px 14px;
+  background: var(--gold);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: var(--sans);
+}
+.api-saved { color: var(--green); font-size: 12px; display: none; }
+
+/* ─── LAYOUT ─── */
+.layout { display: flex; flex: 1; overflow: hidden; }
+
+/* ─── SIDEBAR ─── */
+.sidebar {
+  width: 220px;
+  background: var(--paper2);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  flex-shrink: 0;
+  padding: 16px 0;
+}
+.sidebar-section { padding: 0 12px 16px; }
+.sidebar-label {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--ink3);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0 8px;
+  margin-bottom: 6px;
+}
+.article-item {
+  padding: 7px 10px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--ink2);
+  transition: all 0.12s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+.article-item:hover { background: var(--paper3); color: var(--ink); }
+.article-item.active { background: var(--ink); color: var(--paper); }
+.article-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--paper3);
+}
+.article-item.active .article-dot { background: var(--gold); }
+.article-type {
+  font-size: 10px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.type-prose { background: var(--blue-light); color: var(--blue); }
+.type-poem { background: var(--gold-light); color: var(--gold); }
+.type-classical { background: var(--red-light); color: var(--red); }
+
+/* ─── MAIN ─── */
+.main { flex: 1; display: flex; overflow: hidden; }
+
+/* ─── READING PANEL ─── */
+.reading-panel {
+  flex: 1;
+  overflow-y: auto;
+  padding: 32px 40px;
+}
+.article-header { margin-bottom: 28px; }
+.article-title {
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.article-author {
+  font-size: 14px;
+  color: var(--ink3);
+  font-family: var(--serif);
+  margin-bottom: 14px;
+}
+.article-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.tag {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  color: var(--ink2);
+}
+
+.article-body {
+  font-family: var(--serif);
+  font-size: 17px;
+  line-height: 2.2;
+  color: var(--ink);
+  max-width: 680px;
+}
+.article-body p { margin-bottom: 1.2em; }
+
+.w {
+  background: linear-gradient(180deg, transparent 60%, rgba(184,134,11,0.25) 60%);
+  cursor: pointer;
+  border-radius: 2px;
+  position: relative;
+  padding: 0 1px;
+  transition: background 0.15s;
+}
+.w:hover { background: rgba(184,134,11,0.2); }
+.w.learned { background: linear-gradient(180deg, transparent 60%, rgba(45,106,79,0.3) 60%); }
+.w.learned:hover { background: rgba(45,106,79,0.2); }
+
+.writing-tip {
+  margin-top: 24px;
+  padding: 16px 20px;
+  background: var(--paper2);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-size: 14px;
+  color: var(--ink2);
+  line-height: 1.8;
+  max-width: 680px;
+}
+.writing-tip strong { color: var(--ink); }
+
+.section-divider {
+  height: 1px;
+  background: var(--border);
+  max-width: 680px;
+  margin: 28px 0;
+}
+
+/* ─── RIGHT PANEL ─── */
+.right-panel {
+  width: 320px;
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  flex-shrink: 0;
+}
+.right-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  padding: 0 4px;
+}
+.right-tab {
+  flex: 1;
+  padding: 12px 8px;
+  font-size: 12px;
+  color: var(--ink3);
+  cursor: pointer;
+  text-align: center;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s;
+  font-family: var(--sans);
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+.right-tab:hover { color: var(--ink); }
+.right-tab.active { color: var(--ink); border-bottom-color: var(--ink); font-weight: 500; }
+.right-content { flex: 1; overflow-y: auto; padding: 16px; }
+
+/* ─── WORD CARD ─── */
+.word-card {
+  background: var(--paper2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.word-main { font-family: var(--serif); font-size: 28px; font-weight: 700; color: var(--ink); }
+.word-pinyin { font-size: 13px; color: var(--ink3); margin: 2px 0 10px; }
+.word-def { font-size: 14px; color: var(--ink2); line-height: 1.7; margin-bottom: 12px; }
+.word-contexts-title { font-size: 11px; font-weight: 500; color: var(--ink3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+.word-context-item {
+  padding: 10px 12px;
+  background: var(--paper);
+  border-radius: 6px;
+  margin-bottom: 6px;
+  border-left: 2px solid var(--gold);
+}
+.word-context-text { font-family: var(--serif); font-size: 14px; line-height: 1.8; color: var(--ink); }
+.word-context-src { font-size: 11px; color: var(--ink3); margin-top: 4px; }
+.word-ctx-hl { color: var(--red); font-weight: 700; }
+
+.srs-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+.srs-label { font-size: 11px; color: var(--ink3); }
+.srs-bar-wrap { flex: 1; height: 3px; background: var(--paper3); border-radius: 2px; margin: 0 10px; overflow: hidden; }
+.srs-bar { height: 100%; border-radius: 2px; transition: width 0.3s; }
+.mark-btn {
+  font-size: 11px;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  cursor: pointer;
+  background: none;
+  color: var(--ink2);
+  font-family: var(--sans);
+  transition: all 0.15s;
+}
+.mark-btn:hover { background: var(--green); color: white; border-color: var(--green); }
+.mark-btn.marked { background: var(--green-light); color: var(--green); border-color: rgba(45,106,79,0.3); }
+
+/* ─── PRACTICE TAB ─── */
+.practice-task {
+  background: var(--paper2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  margin-bottom: 14px;
+}
+.task-label { font-size: 10px; font-weight: 500; color: var(--ink3); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
+.task-text { font-size: 13px; color: var(--ink); line-height: 1.8; }
+.required-words { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+.req-word { font-size: 12px; padding: 2px 8px; border-radius: 20px; background: var(--ink); color: var(--paper); font-family: var(--serif); }
+.req-word.used { background: var(--green); }
+
+.write-area {
+  width: 100%;
+  min-height: 120px;
+  padding: 12px;
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 2;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  resize: vertical;
+  background: white;
+  color: var(--ink);
+  transition: border-color 0.15s;
+  margin-bottom: 10px;
+}
+.write-area:focus { outline: none; border-color: var(--ink2); }
+
+.submit-btn {
+  width: 100%;
+  padding: 10px;
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  border-radius: var(--radius);
+  font-family: var(--sans);
+  font-size: 14px;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  margin-bottom: 10px;
+}
+.submit-btn:hover { opacity: 0.85; }
+.submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.feedback {
+  background: var(--green-light);
+  border: 1px solid rgba(45,106,79,0.2);
+  border-radius: var(--radius);
+  padding: 14px;
+  font-size: 13px;
+  color: var(--ink);
+  line-height: 1.8;
+  display: none;
+}
+.feedback.visible { display: block; }
+.feedback.error { background: var(--red-light); border-color: rgba(192,57,43,0.2); }
+.feedback-head { font-weight: 500; font-size: 13px; margin-bottom: 6px; }
+.loading-dots::after {
+  content: '';
+  animation: dots 1.2s infinite;
+}
+@keyframes dots {
+  0%,20% { content: ''; }
+  40% { content: '·'; }
+  60% { content: '··'; }
+  80%,100% { content: '···'; }
+}
+
+/* ─── REVIEW TAB ─── */
+.review-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+.stat-box { background: var(--paper2); border-radius: var(--radius); padding: 10px; text-align: center; border: 1px solid var(--border); }
+.stat-n { font-size: 22px; font-weight: 700; font-family: var(--serif); color: var(--ink); }
+.stat-l { font-size: 10px; color: var(--ink3); margin-top: 2px; }
+.review-card-wrap { perspective: 600px; }
+.review-flip {
+  background: var(--paper2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 20px;
+  text-align: center;
+  margin-bottom: 14px;
+}
+.review-char { font-family: var(--serif); font-size: 52px; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
+.review-ctx {
+  font-family: var(--serif);
+  font-size: 13px;
+  color: var(--ink3);
+  line-height: 1.8;
+  padding: 10px;
+  background: var(--paper);
+  border-radius: 6px;
+  margin-bottom: 14px;
+}
+.review-answer { display: none; }
+.review-answer.visible { display: block; }
+.review-def { font-size: 14px; color: var(--ink2); line-height: 1.7; margin: 12px 0 16px; }
+.review-btns { display: flex; gap: 8px; }
+.review-btn {
+  flex: 1;
+  padding: 8px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  font-size: 12px;
+  cursor: pointer;
+  font-family: var(--sans);
+  background: var(--paper);
+  color: var(--ink);
+  transition: all 0.15s;
+}
+.review-btn.hard:hover { background: var(--red-light); border-color: rgba(192,57,43,0.3); color: var(--red); }
+.review-btn.ok:hover { background: var(--gold-light); border-color: rgba(184,134,11,0.3); color: var(--gold); }
+.review-btn.easy:hover { background: var(--green-light); border-color: rgba(45,106,79,0.3); color: var(--green); }
+.show-answer-btn {
+  width: 100%;
+  padding: 10px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-family: var(--serif);
+  font-size: 14px;
+  cursor: pointer;
+  color: var(--ink2);
+  transition: all 0.15s;
+  margin-bottom: 14px;
+}
+.show-answer-btn:hover { background: var(--paper2); }
+
+.no-review { text-align: center; padding: 40px 20px; color: var(--ink3); font-size: 14px; }
+
+/* ─── EMPTY STATE ─── */
+.empty-word { text-align: center; padding: 40px 20px; color: var(--ink3); }
+.empty-word-char { font-family: var(--serif); font-size: 48px; color: var(--paper3); margin-bottom: 12px; }
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--paper3); border-radius: 10px; }
+
+/* ─── MODAL ─── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(26,20,16,0.5);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 100;
+  display: none;
+}
+.modal-overlay.visible { display: flex; }
+.modal {
+  background: var(--paper);
+  border-radius: 12px;
+  padding: 28px 32px;
+  max-width: 440px;
+  width: 90%;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.2);
+}
+.modal h2 { font-family: var(--serif); font-size: 20px; margin-bottom: 10px; }
+.modal p { font-size: 14px; color: var(--ink2); line-height: 1.7; margin-bottom: 16px; }
+.modal input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-family: monospace;
+  margin-bottom: 14px;
+}
+.modal input:focus { outline: none; border-color: var(--ink); }
+.modal-btn {
+  width: 100%;
+  padding: 11px;
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  border-radius: var(--radius);
+  font-size: 14px;
+  cursor: pointer;
+  font-family: var(--sans);
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-brand">语文<span>学堂</span> · 七年级</div>
+  <div class="header-nav">
+    <button class="nav-btn active" onclick="switchMode('read')">📖 精读</button>
+    <button class="nav-btn" onclick="switchMode('vocab')">📝 词库</button>
+  </div>
+</div>
+
+<div class="layout">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">七年级上册</div>
+      <div id="sidebar-list-s1"></div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">七年级下册</div>
+      <div id="sidebar-list-s2"></div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <!-- READING -->
+    <div class="reading-panel" id="reading-panel">
+      <div id="article-display"></div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="right-panel">
+      <div class="right-tabs">
+        <button class="right-tab active" onclick="switchTab('word')">词汇</button>
+        <button class="right-tab" onclick="switchTab('practice')">仿写</button>
+        <button class="right-tab" onclick="switchTab('review')">复习</button>
+      </div>
+      <div class="right-content" id="right-content">
+        <div class="empty-word">
+          <div class="empty-word-char">词</div>
+          <div>点击文中<br>高亮词汇查看详解</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── DATA ───────────────────────────────────────────────────────────────────
+
+const ARTICLES = [
+  // 七年级上册
+  {
+    id: 'chun', semester: 1, title: '春', author: '朱自清',
+    tags: ['散文', '写景抒情', '拟人·比喻', '总分结构'],
+    type: 'prose',
+    tip: '本文运用"总—分—总"结构：开篇总写春天来临，中间分写春草、春花、春风、春雨、迎春五幅图，结尾总收升华。大量运用<strong>拟人</strong>（"小草偷偷地从土里钻出来"）和<strong>比喻</strong>（"春天像刚落地的娃娃"），语言节奏明快，叠词运用娴熟。',
+    paragraphs: [
+      '盼望着，盼望着，东风来了，春天的脚步近了。',
+      '一切都像刚睡醒的样子，<w id="xxy">欣欣然</w>张开了眼。山<w id="lr">朗润</w>起来了，水涨起来了，太阳的脸红起来了。',
+      '小草<w id="ttd">偷偷地</w>从土里钻出来，嫩嫩的，绿绿的。园子里，田野里，瞧去，一大片一大片满是的。坐着，躺着，打两个滚，踢几脚球，赛几趟跑，捉几回迷藏。风轻悄悄的，草软绵绵的。',
+      '桃树、杏树、梨树，你不让我，我不让你，都开满了花<w id="ganzhao">赶趟儿</w>。红的像火，粉的像霞，白的像雪。花里带着甜味儿；闭了眼，树上仿佛已经满是桃儿、杏儿、梨儿。花下成千成百的蜜蜂嗡嗡地闹着，大小的蝴蝶飞来飞去。',
+      '"吹面不寒杨柳风"，不错的，像母亲的手抚摸着你。风里带来些新翻的泥土的气息，混着青草味儿，还有各种花的香，都在微微润湿的空气里<w id="niangjuan">酝酿</w>。',
+    ],
+    words: {
+      xxy: { word: '欣欣然', pinyin: 'xīn xīn rán', def: '形容欢欢喜喜、生意盎然的样子。副词，修饰"张开了眼"，赋予自然以人的喜悦之情。', contexts: [
+        { text: '一切都像刚睡醒的样子，<b>欣欣然</b>张开了眼。', src: '《春》朱自清 · 七上' },
+        { text: '孩子们<b>欣欣然</b>跑出教室，操场上顿时喧闹起来。', src: '课外散文 · 描写童年' },
+        { text: '见到久别的朋友，他<b>欣欣然</b>迎上前去。', src: '叙事文练习语料' },
+      ]},
+      lr: { word: '朗润', pinyin: 'lǎng rùn', def: '明亮润泽。"朗"指明亮，"润"指滋润。写春雨过后山色明亮而滋润的样子，视觉描写。', contexts: [
+        { text: '山<b>朗润</b>起来了，水涨起来了，太阳的脸红起来了。', src: '《春》朱自清 · 七上' },
+        { text: '雨后，远山<b>朗润</b>，像是刚洗过脸的孩子。', src: '仿写练习语料' },
+        { text: '天色<b>朗润</b>而高远，秋风将最后一片云吹散。', src: '《秋天的记忆》课外阅读' },
+      ]},
+      ttd: { word: '偷偷地', pinyin: 'tōu tōu de', def: '悄悄地，不被察觉地。拟人用法，将春草萌发写得轻柔而充满生命力，仿佛草在"捉迷藏"。', contexts: [
+        { text: '小草<b>偷偷地</b>从土里钻出来，嫩嫩的，绿绿的。', src: '《春》朱自清 · 七上' },
+        { text: '时间<b>偷偷地</b>溜走了，他还浑然不觉。', src: '《匆匆》朱自清 · 六下' },
+        { text: '她<b>偷偷地</b>抹了把泪，转过脸去假装看窗外。', src: '《散步》莫怀戚 · 七上' },
+      ]},
+      ganzhao: { word: '赶趟儿', pinyin: 'gǎn tàng r', def: '原意是赶时间、凑热闹。此处形容桃杏梨争相开花，谁也不甘落后，赋予花树以竞争的人格。', contexts: [
+        { text: '桃树、杏树、梨树，你不让我，我不让你，都开满了花<b>赶趟儿</b>。', src: '《春》朱自清 · 七上' },
+        { text: '集市上，摊主们<b>赶趟儿</b>似地摆出最好的货物。', src: '民俗描写语料' },
+      ]},
+      niangjuan: { word: '酝酿', pinyin: 'yùn niàng', def: '本指造酒发酵，引申为逐渐积累酝酿。此处写各种气息在空气中慢慢弥漫、融合，极具画面感。', contexts: [
+        { text: '风里带来些新翻的泥土的气息，混着青草味儿，都在微微润湿的空气里<b>酝酿</b>。', src: '《春》朱自清 · 七上' },
+        { text: '这场争论<b>酝酿</b>已久，终于在今天爆发。', src: '说明文语料' },
+        { text: '雨<b>酝酿</b>了一整天，傍晚才淅淅沥沥地落下来。', src: '仿写练习语料' },
+      ]},
+    },
+    practice: {
+      prompt: '仿照《春》"小草偷偷地从土里钻出来……"一段，运用拟人手法和叠词，描写秋天或冬天某一自然景物的变化。80-120字。',
+      words: ['朗润', '偷偷地', '欣欣然'],
+      model_answer: '盼望着，盼望着，北风来了，冬天的脚步近了。梧桐叶偷偷地从枝头脱落，黄黄的，薄薄的。草坪里，马路上，瞧去，满地满地都是。踩上去，沙沙作响。树木静静地立着，等待着第一场雪的抚摸。天色朗润而清远，朗润而高寒。',
+    }
+  },
+  {
+    id: 'jinan', semester: 1, title: '济南的冬天', author: '老舍',
+    tags: ['散文', '写景', '比喻·拟人', '情景交融'],
+    type: 'prose',
+    tip: '老舍将济南冬天的温晴与北京的寒风、伦敦的阴暗对比，突出济南的"宝地"特点。写山用"小摇篮"比喻，写水突出"绿"字。本文情感基调温暖，用词精准，值得体会"恰到好处"的分寸感。',
+    paragraphs: [
+      '对于一个在北平住惯的人，像我，冬天要是不刮风，便觉得是奇迹；济南的冬天是<w id="wen">温晴</w>的。',
+      '设若单单是有阳光，那也算不了什么。请闭上眼睛想：一个老城，有山有水，全在<w id="lanwo">蓝汪汪</w>的天儿下很<w id="anshi">暖和</w>地睡着，只等春风来把它们唤醒，这是不是个理想的境界？',
+      '小山整把济南<w id="wobu">围</w>了个圈儿，只有北边缺着点口儿。这一圈小山在冬天特别可爱，好像是把济南放在一个小摇篮里，它们安静不动地低声说："你们放心吧，这儿准保暖和。"',
+      '最妙的是下点小雪呀。看吧，山上的矮松越发的青黑，树尖上顶着一<w id="bo">髻</w>儿白花，好像日本看护妇。山尖全白了，给蓝天<w id="xue">镶</w>上一道银边。山坡上，有的地方雪厚点，有的地方草色还<w id="louchu">露出</w>来，这样，一道儿白，一道儿暗黄，给山们穿上一件带水纹的花衣。',
+    ],
+    words: {
+      wen: { word: '温晴', pinyin: 'wēn qíng', def: '温暖而晴朗。是老舍对济南冬天天气特点的精准概括，也是全文的文眼（核心词）。', contexts: [
+        { text: '济南的冬天是<b>温晴</b>的。', src: '《济南的冬天》老舍 · 七上' },
+        { text: '这里气候<b>温晴</b>，四季如春，是避暑胜地。', src: '地理说明文' },
+      ]},
+      lanwo: { word: '蓝汪汪', pinyin: 'lán wāng wāng', def: '形容蓝得晶莹透亮，大面积纯正的蓝色。叠词"汪汪"增强视觉感，表现天空的深邃明澈。', contexts: [
+        { text: '在<b>蓝汪汪</b>的天儿下很暖和地睡着，只等春风来把它们唤醒。', src: '《济南的冬天》老舍 · 七上' },
+        { text: '小孩的眼睛<b>蓝汪汪</b>的，像两颗宝石。', src: '人物描写语料' },
+      ]},
+      bo: { word: '髻', pinyin: 'jì', def: '发髻，头顶盘起的发结。此处比喻松树顶端的积雪，形象生动，化静为动，产生俏皮感。', contexts: [
+        { text: '树尖上顶着一<b>髻</b>儿白花，好像日本看护妇。', src: '《济南的冬天》老舍 · 七上' },
+        { text: '老妇人梳着整齐的发<b>髻</b>，坐在院子里晒太阳。', src: '人物描写语料' },
+      ]},
+      xue: { word: '镶', pinyin: 'xiāng', def: '把东西嵌入另一物体中或围在另一物体的边缘。写山尖积雪与蓝天相接，用"镶"字极为精准，写出边界感和装饰美。', contexts: [
+        { text: '山尖全白了，给蓝天<b>镶</b>上一道银边。', src: '《济南的冬天》老舍 · 七上' },
+        { text: '窗棂上<b>镶</b>着精美的木雕花纹。', src: '建筑描写语料' },
+      ]},
+      louchu: { word: '露出', pinyin: 'lòu chū', def: '显露出来。这里与雪色对比，写出山坡的"花衣"效果，动词选用精准，画面层次丰富。', contexts: [
+        { text: '有的地方草色还<b>露出</b>来，这样，一道儿白，一道儿暗黄。', src: '《济南的冬天》老舍 · 七上' },
+        { text: '石缝里<b>露出</b>几株顽强的小花，在风中颤动。', src: '仿写语料' },
+      ]},
+      anshi: { word: '暖和', pinyin: 'nuǎn huo', def: '温暖舒适。此处以"暖和地睡着"拟人化写整座老城，温情脉脉，奠定全文温暖基调。', contexts: [
+        { text: '全在蓝汪汪的天儿下很<b>暖和</b>地睡着，只等春风来把它们唤醒。', src: '《济南的冬天》老舍 · 七上' },
+        { text: '阳光透过玻璃窗照进来，室内<b>暖和</b>而安静。', src: '仿写练习语料' },
+      ]},
+      wobu: { word: '围', pinyin: 'wéi', def: '环绕包围。"整把济南围了个圈儿"写出小山对城市的包围感，配合"摇篮"比喻，产生被呵护的温暖感。', contexts: [
+        { text: '小山整把济南<b>围</b>了个圈儿，只有北边缺着点口儿。', src: '《济南的冬天》老舍 · 七上' },
+        { text: '孩子们把老人<b>围</b>在中间，七嘴八舌地问这问那。', src: '叙事文语料' },
+      ]},
+    },
+    practice: {
+      prompt: '仿照老舍写雪后小山的段落，用"最妙的是……"开头，描写一处你熟悉的冬日或雨后景色，运用拟人和比喻，80-120字。',
+      words: ['镶', '露出', '暖和'],
+      model_answer: '最妙的是下过一场秋雨。看吧，远处的楼顶越发深沉，屋檐上挂着一排水珠，像串起的玻璃珠。墙面全湿了，给灰色的街道镶上一道深色的边。地砖上，有的地方积着一汪小水，有的地方露出本色的红褐，这样，一块儿亮，一块儿暗，给街道披上了迷离的雨衣。',
+    }
+  },
+  {
+    id: 'sanbu', semester: 1, title: '散步', author: '莫怀戚',
+    tags: ['散文', '叙事', '以小见大', '家庭伦理'],
+    type: 'prose',
+    tip: '本文叙述一家三代散步的小事，却通过"我"背母亲、妻子背儿子的细节，写出生命的传承与责任。"以小见大"是本文最重要的写法：选取日常小事，挖掘深刻主题。注意文末"整个世界"的哲学升华。',
+    paragraphs: [
+      '我们在田野散步：我，我的母亲，我的妻子和儿子。',
+      '母亲本不愿出来的。她老了，身体不好，走远一点就觉得很累。我说，正因为如此，才应该多走走。母亲信服地点点头，便去拿外套。她现在很听我的话，就像我小时候很听她的话一样。',
+      '后来发生了<w id="fenqi">分歧</w>：母亲要走大路，大路平顺；我的儿子要走小路，小路有意思。不过，一切都取决于我。我的母亲老了，她早已习惯<w id="ting">听从</w>她强壮的儿子；我的儿子还小，他还习惯服从他强壮的父亲；妻子呢，在外面，她总是<w id="tingcong">听我的</w>。',
+      '我决定委屈儿子，因为我伴同他的时日还长。我说："走大路。"',
+      '但是母亲摸摸孙儿的小脑瓜，变了主意："还是走小路吧。"她的眼随小路望去：那里有金色的菜花，两行整齐的桑树，尽头一口水波<w id="linlin">粼粼</w>的鱼塘。"我走不过去的地方，你就<w id="bao">背</w>着我。"',
+    ],
+    words: {
+      fenqi: { word: '分歧', pinyin: 'fēn qí', def: '在看法或行动上有不一致、不统一的地方。此处是全文的情节转折点，家庭走哪条路的"分歧"折射出生命中的责任选择。', contexts: [
+        { text: '后来发生了<b>分歧</b>：母亲要走大路，大路平顺；我的儿子要走小路，小路有意思。', src: '《散步》莫怀戚 · 七上' },
+        { text: '两国在这一问题上存在根本<b>分歧</b>，谈判陷入僵局。', src: '议论文语料' },
+      ]},
+      linlin: { word: '粼粼', pinyin: 'lín lín', def: '形容水清澈而有波纹闪光的样子。叠音词，视觉感强，与"金色的菜花"共同构成温暖的画面。', contexts: [
+        { text: '尽头一口水波<b>粼粼</b>的鱼塘。', src: '《散步》莫怀戚 · 七上' },
+        { text: '湖面波光<b>粼粼</b>，远山的倒影在水中微微颤动。', src: '写景散文语料' },
+      ]},
+      bao: { word: '背', pinyin: 'bēi', def: '用背部驮负（人或物）。文末"我背母亲，妻背儿子"这一对称画面是全文主旨的集中体现——中年人肩负两代的重量。', contexts: [
+        { text: '我走不过去的地方，你就<b>背</b>着我。', src: '《散步》莫怀戚 · 七上' },
+        { text: '父亲<b>背</b>着年幼的我，在雪地里深一脚浅一脚地走。', src: '叙事文语料' },
+      ]},
+      ting: { word: '听从', pinyin: 'tīng cóng', def: '接受并遵从（他人的意见）。与下文"服从"形成呼应，写出家庭伦理中顺从关系的流转。', contexts: [
+        { text: '她早已习惯<b>听从</b>她强壮的儿子。', src: '《散步》莫怀戚 · 七上' },
+        { text: '他不善于<b>听从</b>别人的建议，总是一意孤行。', src: '人物评析语料' },
+      ]},
+      tingcong: { word: '听我的', pinyin: 'tīng wǒ de', def: '口语化表达，听从我的决定。莫怀戚有意用口语降低语言重量，却写出了家庭责任的沉甸甸。', contexts: [
+        { text: '妻子呢，在外面，她总是<b>听我的</b>。', src: '《散步》莫怀戚 · 七上' },
+      ]},
+    },
+    practice: {
+      prompt: '以"以小见大"的手法，写一件家庭小事（如一顿饭、一次等待、一个眼神），通过细节体现家人之间的情感或责任。100-150字。',
+      words: ['分歧', '粼粼', '委屈'],
+      model_answer: '那天我们在厨房吃饭，发生了小小的分歧：父亲要开窗，说外面的风带着草木的气息；母亲要关窗，说孩子会着凉。我夹在中间，看看这个，看看那个。最后是父亲站起来，把窗子开了一条缝——既不委屈母亲的担忧，也留住了那一缕带着春意的风。窗缝里透进来一道光，落在粼粼的汤面上，一家人都安静下来。',
+    }
+  },
+  {
+    id: 'lunyu', semester: 1, title: '《论语》十二章', author: '孔子及弟子',
+    tags: ['文言文', '语录体', '修身·为学', '儒家思想'],
+    type: 'classical',
+    tip: '《论语》是语录体散文，每章独立，理解重在"炼字"。核心概念：学与思（学而不思则罔）、仁（己所不欲勿施于人）、时（学而时习之）。文言文阅读首要任务：逐字落实，再整体贯通。',
+    paragraphs: [
+      '子曰："学而时习之，不亦<w id="yue">说</w>乎？有朋自远方来，不亦乐乎？人不知而不<w id="yun">愠</w>，不亦君子乎？"',
+      '曾子曰："吾日三省吾身：为人谋而不忠乎？与朋友交而不信乎？传不习乎？"',
+      '子曰："吾十有五而志于学，三十而<w id="li">立</w>，四十而不惑，五十而知天命，六十而<w id="er">耳顺</w>，七十而从心所欲，不逾矩。"',
+      '子曰："温故而知新，可以为师矣。"',
+      '子曰："学而不思则<w id="wang">罔</w>，思而不学则<w id="dai">殆</w>。"',
+      '子曰："贤哉，回也！一箪食，一瓢饮，在陋巷，人不堪其忧，回也不改其乐。贤哉，回也！"',
+    ],
+    words: {
+      yue: { word: '说（悦）', pinyin: 'yuè', def: '通假字，通"悦"，愉快、喜悦。文言通假字需特别记忆：字形是"说"，意义读音是"悦"。', contexts: [
+        { text: '学而时习之，不亦<b>说</b>乎？', src: '《论语》十二章 · 七上' },
+        { text: '（此字在此义项中专用于古文，现代文一律写"悦"。）', src: '文言文注释' },
+      ]},
+      yun: { word: '愠', pinyin: 'yùn', def: '生气、恼怒。"人不知而不愠"——别人不了解自己却不生气，体现君子修养中的宽容与自信。', contexts: [
+        { text: '人不知而不<b>愠</b>，不亦君子乎？', src: '《论语》十二章 · 七上' },
+        { text: '他心中虽有些<b>愠</b>意，面上却依旧平静。', src: '人物描写语料（仿古）' },
+      ]},
+      li: { word: '立', pinyin: 'lì', def: '立身，有所成就，能独立承担责任。"三十而立"指人到三十岁，在社会上已能站稳脚跟、有所作为。', contexts: [
+        { text: '三十而<b>立</b>，四十而不惑。', src: '《论语》十二章 · 七上' },
+        { text: '此处"立"是动词，指在道德和事业上的自我确立，非物理意义的"站立"。', src: '文言文注释' },
+      ]},
+      wang: { word: '罔', pinyin: 'wǎng', def: '迷惑、无所得。"学而不思则罔"：只学习不思考，就会迷茫困惑，所学无益。与"殆"对举成文，是孔子论学思关系的精华。', contexts: [
+        { text: '学而不思则<b>罔</b>，思而不学则殆。', src: '《论语》十二章 · 七上' },
+        { text: '读书<b>罔</b>效，盖因未能沉心思索。', src: '文言文仿写语料' },
+      ]},
+      dai: { word: '殆', pinyin: 'dài', def: '疑惑、危险。"思而不学则殆"：只思考不学习，就会陷于空想而危险。此字在文言文中有"几乎""危险""疑惑"等多义，需结合语境判断。', contexts: [
+        { text: '思而不学则<b>殆</b>。', src: '《论语》十二章 · 七上' },
+        { text: '知彼知己，百战不<b>殆</b>。', src: '《孙子兵法》（"殆"此处意为失败危险）' },
+      ]},
+      er: { word: '耳顺', pinyin: 'ěr shùn', def: '听到别人说话，能了解其真意，不必多加思索。六十岁的人生境界：超越偏见，能包容各种声音。也有解作"闻善言即信，无所违逆"。', contexts: [
+        { text: '六十而<b>耳顺</b>，七十而从心所欲，不逾矩。', src: '《论语》十二章 · 七上' },
+      ]},
+    },
+    practice: {
+      prompt: '从《论语》十二章中，选一句你最有感触的话，先解释其含义，再结合自己的学习经历写一段感想。100-150字。',
+      words: ['罔', '殆', '温故'],
+      model_answer: '"学而不思则罔，思而不学则殆。"这句话让我印象最深。上学期我背了很多历史时间，却不明白事件之间的联系，每次考试仍然混乱——这正是"罔"。后来我尝试一边复习一边画时间轴，把"温故"和思考结合起来，才真正理解了那段历史。孔子这句话，不是要我们在学与思中选一个，而是告诉我们两者缺一不可。',
+    }
+  },
+  {
+    id: 'ciguanhai', semester: 1, title: '观沧海', author: '曹操',
+    tags: ['古诗', '四言诗', '借景抒情', '壮志豪情'],
+    type: 'poem',
+    tip: '《观沧海》是中国现存最早的完整山水诗，写曹操北征乌桓途中登碣石山所见。"日月之行，若出其中；星汉灿烂，若出其里"是虚写（想象），表现胸怀天下的豪情壮志。实写与虚写的结合是本诗重点。',
+    paragraphs: [
+      '东临<w id="jie">碣石</w>，以观沧海。',
+      '水何<w id="dantan">澹澹</w>，山岛<w id="song">竦峙</w>。',
+      '树木丛生，百草丰茂。',
+      '秋风萧瑟，洪波<w id="yong">涌起</w>。',
+      '日月之行，若出其中；<w id="xinhan">星汉</w>灿烂，若出其里。',
+      '<w id="xingzhi">幸甚至哉</w>，歌以咏志。',
+    ],
+    words: {
+      jie: { word: '碣石', pinyin: 'jié shí', def: '山名，在今河北省昌黎县北。曹操于建安十二年征乌桓胜利后，途经此地，登山望海，写下此诗。', contexts: [
+        { text: '东临<b>碣石</b>，以观沧海。', src: '《观沧海》曹操 · 七上' },
+        { text: '东临<b>碣石</b>有遗篇。（毛泽东《浪淘沙·北戴河》引用曹操登碣石的典故）', src: '毛泽东诗词' },
+      ]},
+      dantan: { word: '澹澹', pinyin: 'dàn dàn', def: '水波摇荡的样子。叠词，写大海水面宽广、波浪起伏的状态，以视觉写海的辽阔。', contexts: [
+        { text: '水何<b>澹澹</b>，山岛竦峙。', src: '《观沧海》曹操 · 七上' },
+        { text: '湖面<b>澹澹</b>，芦苇随风轻摆。', src: '写景散文仿写语料' },
+      ]},
+      song: { word: '竦峙', pinyin: 'sǒng zhì', def: '高高地挺立。"竦"指高耸，"峙"指耸立。山岛从大海中高高突起，与"澹澹"的平阔水面形成高低对比。', contexts: [
+        { text: '水何澹澹，山岛<b>竦峙</b>。', src: '《观沧海》曹操 · 七上' },
+        { text: '两座<b>竦峙</b>的山峰夹住谷口，险峻异常。', src: '游记语料' },
+      ]},
+      xinhan: { word: '星汉', pinyin: 'xīng hàn', def: '银河。"星汉灿烂，若出其里"——银河也仿佛从大海里涌现出来，极写大海的雄浑壮阔，是全诗最重要的虚写句。', contexts: [
+        { text: '<b>星汉</b>灿烂，若出其里。', src: '《观沧海》曹操 · 七上' },
+        { text: '<b>星汉</b>西流夜未央，牵牛织女遥相望。', src: '古诗拓展语料' },
+      ]},
+      yong: { word: '涌起', pinyin: 'yǒng qǐ', def: '翻涌而起。秋风中洪波翻涌，动态感强，与前文静态的"澹澹""竦峙"形成动静对比，写出大海的磅礴气势。', contexts: [
+        { text: '秋风萧瑟，洪波<b>涌起</b>。', src: '《观沧海》曹操 · 七上' },
+        { text: '心中豪情<b>涌起</b>，他握紧拳头，向远处的山呐喊。', src: '叙事文语料' },
+      ]},
+      xingzhi: { word: '幸甚至哉', pinyin: 'xìng shèn zhì zāi', def: '庆幸得很，好极了。这是乐府诗固定的结尾套语，非诗歌正文内容，用以配乐演唱。考试常考"此句作用"——答：乐府诗结尾套语，与正文内容无关。', contexts: [
+        { text: '<b>幸甚至哉</b>，歌以咏志。', src: '《观沧海》曹操 · 七上' },
+        { text: '（"幸甚至哉，歌以咏志"在乐府诗中是固定格式，相当于现代歌曲的"副歌"部分，与诗歌核心内容无关，考试注意区分。）', src: '考点注释' },
+      ]},
+    },
+    practice: {
+      prompt: '仿写《观沧海》的写法：先实写眼前所见（两三行），再虚写想象所感（两三行），最后一句点明心志。不限于海，可写山、江、星空等。',
+      words: ['竦峙', '澹澹', '涌起'],
+      model_answer: '西望群山，以观落日。/山色何苍苍，云海竦峙。/树影婆娑，晚风萧疏。/秋色澹澹，余晖涌起。/万古之悲，若聚其顶；千年之事，若藏其中。/幸甚至哉，立此以观志。',
+    }
+  },
+  // 七年级下册
+  {
+    id: 'choutu', semester: 2, title: '从百草园到三味书屋', author: '鲁迅',
+    tags: ['散文', '回忆性', '对比结构', '童年视角'],
+    type: 'prose',
+    tip: '本文以"从……到……"为题，暗含对比结构：百草园（自由乐园）vs 三味书屋（束缚课堂）。鲁迅用儿童视角写百草园，细节生动；写三味书屋，于平淡中含批判。注意"不必说……也不必说……单是……"的句式，是精读仿写的重点句型。',
+    paragraphs: [
+      '不必说碧绿的菜畦，光滑的石井栏，高大的皂荚树，紫红的桑椹；也不必说鸣蝉在树叶里长吟，肥胖的黄蜂<w id="fufu">伏</w>在菜花上，轻捷的叫天子（云雀）忽然从草间直<w id="cuan">窜</w>向云霄里去了。',
+      '单是周围的短短的泥墙根一带，就有无限趣味。油蛉在这里低唱，蟋蟀们在这里弹琴。翻开断砖来，有时会遇见<w id="bianfu">蜈蚣</w>；还有斑蝥，倘若用手指按住它的脊梁，便会啪的一声，从后窍喷出一阵烟雾。',
+      '如果不怕刺，还可以摘到覆盆子，像小珊瑚珠<w id="zan">攒</w>成的小球，又酸又甜，色味都比桑椹要好得远。',
+      '先生读书入神的时候，我们是不用做功课的。有几个便用纸糊的盔甲套在指甲上做戏。我是画画儿，用一种<w id="miao">描</w>红纸，把"荡口"描得乌黑，然后<w id="xiu">绣</w>上花边。',
+    ],
+    words: {
+      fufu: { word: '伏', pinyin: 'fú', def: '趴伏、静止不动地停在上面。黄蜂"伏"在菜花上，一字写出其肥胖、懒散、安逸的状态，动词极为精准。', contexts: [
+        { text: '肥胖的黄蜂<b>伏</b>在菜花上。', src: '《从百草园到三味书屋》鲁迅 · 七下' },
+        { text: '猫<b>伏</b>在墙头，眯着眼睛晒太阳。', src: '动物描写语料' },
+      ]},
+      cuan: { word: '窜', pinyin: 'cuàn', def: '快速乱跑或飞出。"直窜向云霄"写叫天子（云雀）起飞速度之快、之突然，动态感十足，与"伏"的静态形成对比。', contexts: [
+        { text: '叫天子忽然从草间直<b>窜</b>向云霄里去了。', src: '《从百草园到三味书屋》鲁迅 · 七下' },
+        { text: '一道闪电<b>窜</b>过天际，随即雷声大作。', src: '写景语料' },
+      ]},
+      zan: { word: '攒', pinyin: 'cuán', def: '聚集、凑在一起。"像小珊瑚珠攒成的小球"——覆盆子的颗粒感和圆润感通过这一动词跃然纸上。', contexts: [
+        { text: '像小珊瑚珠<b>攒</b>成的小球，又酸又甜。', src: '《从百草园到三味书屋》鲁迅 · 七下' },
+        { text: '孩子们<b>攒</b>在一起，凑头看那只受伤的小鸟。', src: '叙事文语料' },
+      ]},
+      bianfu: { word: '蜈蚣', pinyin: 'wú gōng', def: '节肢动物，多足，有毒腺。鲁迅在描写百草园时，连蜈蚣这样让大人恐惧的东西也写得有趣，体现儿童视角的特点：好奇而无惧。', contexts: [
+        { text: '翻开断砖来，有时会遇见<b>蜈蚣</b>。', src: '《从百草园到三味书屋》鲁迅 · 七下' },
+      ]},
+      miao: { word: '描', pinyin: 'miáo', def: '照着样子画或写。"描红纸"是旧时蒙学练字用纸，印有红色字样，学生用墨水描写。写三味书屋课堂，偷玩的细节生动传神。', contexts: [
+        { text: '我是画画儿，用一种<b>描</b>红纸，把"荡口"描得乌黑。', src: '《从百草园到三味书屋》鲁迅 · 七下' },
+        { text: '她仔细地<b>描</b>着图样，笔尖轻轻划过纸面。', src: '人物描写语料' },
+      ]},
+      xiu: { word: '绣', pinyin: 'xiù', def: '用彩线在织物上刺绣花纹图案。课堂上绣花边，是孩子对枯燥课堂的抵抗，鲁迅用"绣"字写出了童年的创造力与反抗。', contexts: [
+        { text: '然后<b>绣</b>上花边。', src: '《从百草园到三味书屋》鲁迅 · 七下' },
+        { text: '奶奶在灯下<b>绣</b>着鞋垫，针线穿梭，声音细微。', src: '人物描写语料' },
+      ]},
+    },
+    practice: {
+      prompt: '仿照"不必说……也不必说……单是……就有无限趣味"的句式，描写一处你熟悉的地方（操场、厨房、市场、公园等），写出其中令你印象深刻的细节。100-150字。',
+      words: ['伏', '窜', '攒'],
+      model_answer: '不必说宽阔的篮球场，斑驳的白色球线，高耸的灯柱，翠绿的攀爬架；也不必说麻雀伏在窗沿啄食，野猫窜过铁栅栏，一群低年级小孩攒在沙堆边你推我搡地建城堡。单是食堂门口那一带，就有无限趣味。香气在这里涌动，碰撞声在这里此起彼伏。放学的铃声一响，人流便从四面八方涌来，把那扇铁门挤得叮当作响。',
+    }
+  },
+  {
+    id: 'mulan', semester: 2, title: '木兰诗', author: '北朝民歌',
+    tags: ['古诗', '乐府诗', '叙事诗', '爱国·家国情怀'],
+    type: 'poem',
+    tip: '《木兰诗》是北朝乐府民歌，中国古代最长的叙事诗之一。重点：互文修辞（"将军百战死，壮士十年归"）、详略得当（出征战斗略写，家庭情节详写）、排比夸张（"万里赴戎机，关山度若飞"）。',
+    paragraphs: [
+      '唧唧复唧唧，木兰当户<w id="zhi">织</w>。不闻机杼声，唯闻女叹息。',
+      '问女何所思，问女何所忆。女亦无所思，女亦无所忆。昨夜见<w id="jun">军帖</w>，可汗大点兵，军书十二卷，卷卷有<w id="ye">爷</w>名。',
+      '东市买骏马，西市买<w id="an">鞍鞯</w>，南市买辔头，北市买长鞭。旦辞爷娘去，暮宿黄河边，不闻爷娘唤女声，但闻黄河流水鸣溅溅。',
+      '万里赴戎机，关山度若飞。朔气传金柝，寒光照铁衣。将军百战死，壮士十年归。',
+      '归来见天子，天子坐<w id="miting">明堂</w>。策勋十二转，赏赐百千强。可汗问所欲，木兰不用<w id="shang">尚书郎</w>，愿借明驼千里足，送儿还故乡。',
+    ],
+    words: {
+      zhi: { word: '织', pinyin: 'zhī', def: '纺织。开篇以织布声引出叹息，动静对比，立刻制造悬念。"当户织"写木兰坐在门口织布，是平常劳作的生活画面，为后文的转折蓄势。', contexts: [
+        { text: '木兰当户<b>织</b>。不闻机杼声，唯闻女叹息。', src: '《木兰诗》· 七下' },
+        { text: '机杼声停，叹息声起——对比之间，故事开始。', src: '考点解析' },
+      ]},
+      jun: { word: '军帖', pinyin: 'jūn tiě', def: '军中的文告，征兵的文书。看到军帖，知道父亲在征兵名单上，这是木兰替父从军的直接起因。', contexts: [
+        { text: '昨夜见<b>军帖</b>，可汗大点兵。', src: '《木兰诗》· 七下' },
+        { text: '（古代军帖相当于现代的征兵令，见到军帖意味着必须应征。）', src: '文化注释' },
+      ]},
+      ye: { word: '爷', pinyin: 'yé', def: '古汉语中指"父亲"，非现代汉语的"爷爷"。这是常见的古今异义词，考试必考。"卷卷有爷名"即每卷征兵名单都有父亲的名字。', contexts: [
+        { text: '卷卷有<b>爷</b>名。', src: '《木兰诗》· 七下' },
+        { text: '（古今异义：古代"爷"=父亲；现代"爷爷"=祖父。考试常考。）', src: '考点注释' },
+      ]},
+      an: { word: '鞍鞯', pinyin: 'ān jiān', def: '马鞍和鞍下的垫子。东西南北四市分别购买，是互文写法，实际上是在各处市场买齐了所有装备，写出准备之迅速。', contexts: [
+        { text: '东市买骏马，西市买<b>鞍鞯</b>，南市买辔头，北市买长鞭。', src: '《木兰诗》· 七下' },
+        { text: '（"东市买……西市买……"是互文：言东市可以买到西市所买之物，互相补充，实为各处市场都买了。）', src: '修辞注释' },
+      ]},
+      miting: { word: '明堂', pinyin: 'míng táng', def: '古代天子举行大典的宫室。天子在明堂接见凯旋的木兰，写出仪式的庄重与木兰功勋的显赫。', contexts: [
+        { text: '归来见天子，天子坐<b>明堂</b>。', src: '《木兰诗》· 七下' },
+      ]},
+      shang: { word: '尚书郎', pinyin: 'shàng shū láng', def: '官名，负责文书的官员。木兰放弃高官厚禄，只求回家，体现其淡泊名利、深爱家国的品质，是全诗主旨的集中体现。', contexts: [
+        { text: '木兰不用<b>尚书郎</b>，愿借明驼千里足，送儿还故乡。', src: '《木兰诗》· 七下' },
+        { text: '（木兰拒绝做官而选择还乡，与西方英雄追求荣耀的模式不同，体现中国传统家国观念。）', src: '主旨分析' },
+      ]},
+    },
+    practice: {
+      prompt: '《木兰诗》用"东市买……西市买……"写出备战之快，用"不闻……但闻……"写出思乡之情。选用其中一种句式，写一个现代场景（如备考、准备旅行、等待某人）。80-120字。',
+      words: ['爷（父亲）', '军帖', '归来'],
+      model_answer: '不闻父母叮嘱声，唯闻手机震动声。/昨夜见通知书，大学开学报名。/书单十二册，册册要买全。/东店买教材，西店买文具，南馆买台灯，北市买行囊。/旦辞家门去，暮宿宿舍间。/不闻父母叮咛声，但闻室友键盘声。',
+    }
+  },
+];
+
+// SRS DATA (localStorage simulation via JS object)
+let srsData = JSON.parse(localStorage.getItem('srs_data') || '{}');
+let learnedWords = JSON.parse(localStorage.getItem('learned_words') || '{}');
+
+function saveSRS() {
+  localStorage.setItem('srs_data', JSON.stringify(srsData));
+  localStorage.setItem('learned_words', JSON.stringify(learnedWords));
+}
+
+function getNextReview(wordKey) {
+  const d = srsData[wordKey];
+  if (!d) return null;
+  return new Date(d.nextReview);
+}
+
+function recordReview(wordKey, ease) {
+  // ease: 1=hard,2=ok,3=easy
+  const now = Date.now();
+  const d = srsData[wordKey] || { interval: 1, ease: 2.5, reviews: 0 };
+  d.reviews++;
+  if (ease === 1) { d.interval = 1; d.ease = Math.max(1.3, d.ease - 0.2); }
+  else if (ease === 2) { d.interval = Math.round(d.interval * d.ease); }
+  else { d.interval = Math.round(d.interval * d.ease * 1.3); d.ease = Math.min(3, d.ease + 0.1); }
+  d.nextReview = now + d.interval * 86400000;
+  d.lastReview = now;
+  srsData[wordKey] = d;
+  saveSRS();
+}
+
+function markLearned(wordKey) {
+  learnedWords[wordKey] = Date.now();
+  if (!srsData[wordKey]) {
+    srsData[wordKey] = { interval: 1, ease: 2.5, reviews: 0, nextReview: Date.now() + 86400000 };
+  }
+  saveSRS();
+}
+
+function getSRSProgress(wordKey) {
+  const d = srsData[wordKey];
+  if (!d) return 0;
+  const maxInterval = 30;
+  return Math.min(100, Math.round((d.interval / maxInterval) * 100));
+}
+
+function getDueWords() {
+  const now = Date.now();
+  return Object.keys(srsData).filter(k => srsData[k].nextReview <= now);
+}
+
+// ─── STATE ──────────────────────────────────────────────────────────────────
+let currentArticle = ARTICLES[0];
+let currentWord = null;
+let activeTab = 'word';
+
+// ─── INIT ────────────────────────────────────────────────────────────────────
+function init() {
+  buildSidebar();
+  loadArticle(ARTICLES[0]);
+}
+
+function buildSidebar() {
+  const s1 = document.getElementById('sidebar-list-s1');
+  const s2 = document.getElementById('sidebar-list-s2');
+  ARTICLES.forEach(a => {
+    const el = document.createElement('div');
+    el.className = 'article-item' + (a.id === currentArticle.id ? ' active' : '');
+    el.id = 'nav-' + a.id;
+    const typeLabel = a.type === 'poem' ? '诗' : a.type === 'classical' ? '古文' : '散文';
+    const typeClass = a.type === 'poem' ? 'type-poem' : a.type === 'classical' ? 'type-classical' : 'type-prose';
+    el.innerHTML = `<span class="article-dot"></span>${a.title}<span class="article-type ${typeClass}">${typeLabel}</span>`;
+    el.onclick = () => loadArticle(a);
+    (a.semester === 1 ? s1 : s2).appendChild(el);
+  });
+}
+
+function loadArticle(article) {
+  currentArticle = article;
+  currentWord = null;
+
+  document.querySelectorAll('.article-item').forEach(el => el.classList.remove('active'));
+  const navEl = document.getElementById('nav-' + article.id);
+  if (navEl) navEl.classList.add('active');
+
+  const tagsHtml = article.tags.map(t => `<span class="tag">${t}</span>`).join('');
+  let bodyHtml = article.paragraphs.map(p => `<p>${p}</p>`).join('');
+
+  document.getElementById('article-display').innerHTML = `
+    <div class="article-header">
+      <div class="article-title">${article.title}</div>
+      <div class="article-author">${article.author}</div>
+      <div class="article-tags">${tagsHtml}</div>
+    </div>
+    <div class="article-body">${bodyHtml}</div>
+    <div class="section-divider"></div>
+    <div class="writing-tip"><strong>写作手法：</strong>${article.tip}</div>
+  `;
+
+  // attach word click
+  document.querySelectorAll('.w').forEach(el => {
+    const wid = el.id;
+    if (article.words[wid]) {
+      if (learnedWords[currentArticle.id + '_' + wid]) el.classList.add('learned');
+      el.onclick = () => showWord(wid);
+    }
+  });
+
+  switchTab('word');
+  showWordDefault();
+}
+
+function showWordDefault() {
+  document.getElementById('right-content').innerHTML = `
+    <div class="empty-word">
+      <div class="empty-word-char">词</div>
+      <div style="font-size:14px;color:var(--ink3);">点击文中<br>高亮词汇<br>查看详解与语境</div>
+    </div>
+  `;
+}
+
+function showWord(wid) {
+  const wordData = currentArticle.words[wid];
+  if (!wordData) return;
+  currentWord = wid;
+  const wordKey = currentArticle.id + '_' + wid;
+  const isLearned = !!learnedWords[wordKey];
+  const progress = getSRSProgress(wordKey);
+  const nextReview = getNextReview(wordKey);
+  const srsLabel = nextReview ? `下次复习：${formatDate(nextReview)}` : '尚未加入复习';
+
+  const contextsHtml = wordData.contexts.map(c => `
+    <div class="word-context-item">
+      <div class="word-context-text">${c.text}</div>
+      <div class="word-context-src">${c.src}</div>
+    </div>
+  `).join('');
+
+  const barColor = progress > 66 ? '#2d6a4f' : progress > 33 ? '#b8860b' : '#c0392b';
+
+  document.getElementById('right-content').innerHTML = `
+    <div class="word-card">
+      <div class="word-main">${wordData.word}</div>
+      <div class="word-pinyin">${wordData.pinyin}</div>
+      <div class="word-def">${wordData.def}</div>
+      <div class="word-contexts-title">在不同语境中的使用</div>
+      ${contextsHtml}
+      <div class="srs-info">
+        <div class="srs-label">${srsLabel}</div>
+        <div class="srs-bar-wrap"><div class="srs-bar" style="width:${progress}%;background:${barColor}"></div></div>
+        <button class="mark-btn ${isLearned ? 'marked' : ''}" onclick="toggleLearned('${wordKey}','${wid}')" id="mark-btn-${wordKey}">
+          ${isLearned ? '✓ 已掌握' : '加入复习'}
+        </button>
+      </div>
+    </div>
+    <button class="submit-btn" style="margin-top:8px;" onclick="switchTab('practice')">去仿写练习 →</button>
+  `;
+}
+
+function toggleLearned(wordKey, wid) {
+  if (learnedWords[wordKey]) {
+    delete learnedWords[wordKey];
+    delete srsData[wordKey];
+    document.getElementById('mark-btn-' + wordKey).textContent = '加入复习';
+    document.getElementById('mark-btn-' + wordKey).classList.remove('marked');
+    document.querySelectorAll('.w').forEach(el => { if (el.id === wid) el.classList.remove('learned'); });
+  } else {
+    markLearned(wordKey);
+    document.getElementById('mark-btn-' + wordKey).innerHTML = '✓ 已掌握';
+    document.getElementById('mark-btn-' + wordKey).classList.add('marked');
+    document.querySelectorAll('.w').forEach(el => { if (el.id === wid) el.classList.add('learned'); });
+  }
+  saveSRS();
+}
+
+function formatDate(d) {
+  const now = new Date();
+  const diff = Math.round((d - now) / 86400000);
+  if (diff <= 0) return '今天';
+  if (diff === 1) return '明天';
+  if (diff < 7) return diff + ' 天后';
+  return Math.round(diff / 7) + ' 周后';
+}
+
+// ─── TABS ───────────────────────────────────────────────────────────────────
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.right-tab').forEach((el, i) => {
+    el.classList.toggle('active', ['word','practice','review'][i] === tab);
+  });
+  if (tab === 'word') {
+    if (currentWord) showWord(currentWord);
+    else showWordDefault();
+  } else if (tab === 'practice') {
+    showPractice();
+  } else {
+    showReview();
+  }
+}
+
+// ─── PRACTICE ───────────────────────────────────────────────────────────────
+function showPractice() {
+  const p = currentArticle.practice;
+  const wordsHtml = p.words.map(w => `<span class="req-word" id="rw-${w}">${w}</span>`).join('');
+  document.getElementById('right-content').innerHTML = `
+    <div class="practice-task">
+      <div class="task-label">仿写任务 · ${currentArticle.title}</div>
+      <div class="task-text">${p.prompt}</div>
+      <div class="required-words">${wordsHtml}</div>
+    </div>
+    <textarea class="write-area" id="write-area" placeholder="在此写下你的仿写…" oninput="checkWords(this.value)"></textarea>
+    <button class="submit-btn" id="submit-btn" onclick="submitWriting()">检查仿写</button>
+    <div class="feedback" id="feedback"></div>
+    <div style="margin-top:12px;">
+      <button class="submit-btn" style="background:transparent;color:var(--ink3);border:1px solid var(--border);font-size:12px;" onclick="showModelAnswer()">查看范文参考</button>
+    </div>
+    <div class="feedback" id="model-answer-box" style="background:var(--gold-light);border-color:rgba(184,134,11,0.2);display:none;"></div>
+  `;
+}
+
+function checkWords(text) {
+  const p = currentArticle.practice;
+  p.words.forEach(w => {
+    const baseW = w.replace(/（.*）/, '').replace(/\(.*\)/, '');
+    const el = document.getElementById('rw-' + w);
+    if (el) el.classList.toggle('used', text.includes(baseW));
+  });
+}
+
+function showModelAnswer() {
+  const box = document.getElementById('model-answer-box');
+  box.style.display = 'block';
+  box.innerHTML = `<div class="feedback-head">范文参考</div>${currentArticle.practice.model_answer}`;
+}
+
+function submitWriting() {
+  const text = document.getElementById('write-area').value.trim();
+  const fb = document.getElementById('feedback');
+  const btn = document.getElementById('submit-btn');
+
+  if (!text) {
+    fb.className = 'feedback error visible';
+    fb.innerHTML = '<div class="feedback-head">请先写下你的仿写内容。</div>';
+    return;
+  }
+
+  const p = currentArticle.practice;
+  const charCount = text.length;
+
+  // 1. 词汇检查
+  const baseWords = p.words.map(w => w.replace(/（.*）/, '').replace(/\(.*\)/, ''));
+  const used = baseWords.filter(w => text.includes(w));
+  const missed = baseWords.filter(w => !text.includes(w));
+
+  let lines = [];
+
+  // 词汇反馈
+  if (missed.length === 0) {
+    lines.push('✅ <b>词汇使用</b>：所有要求词汇都用上了，很棒！');
+  } else if (used.length > 0) {
+    lines.push(`📝 <b>词汇使用</b>：已用到「${used.join('、')}」，还差「${missed.join('、')}」，试着加入句子中。`);
+  } else {
+    lines.push(`📝 <b>词汇使用</b>：请尝试在仿写中使用「${missed.join('、')}」。`);
+  }
+
+  // 2. 篇幅反馈
+  if (charCount < 40) {
+    lines.push('📏 <b>篇幅</b>：内容较短，可以再展开——加入更多感官细节（看到什么？听到什么？感受到什么？）');
+  } else if (charCount >= 40 && charCount < 80) {
+    lines.push('📏 <b>篇幅</b>：篇幅适中，如果能再增加一些细节描写会更丰富。');
+  } else {
+    lines.push('📏 <b>篇幅</b>：篇幅充足，内容丰富！');
+  }
+
+  // 3. 手法提示（根据课文类型）
+  const genre = currentArticle.practice.genre || '';
+  if (genre.includes('拟人')) {
+    const renyiPatterns = ['的', '地', '着', '了', '起来', '出来', '走', '跑', '笑', '哭', '说', '唱', '跳'];
+    const hasAction = renyiPatterns.some(p => text.includes(p));
+    if (hasAction) {
+      lines.push('✨ <b>写作手法</b>：句子中有动作或状态描写，留意其中有没有让自然物"做"人才做的事——这就是拟人。');
+    } else {
+      lines.push('💡 <b>写作手法</b>：仿写要求运用拟人手法，试试让花、草、风、雨做一个人才会做的动作或表达情感。');
+    }
+  } else if (genre.includes('比喻')) {
+    const hasSimile = text.includes('像') || text.includes('仿佛') || text.includes('如') || text.includes('似');
+    lines.push(hasSimile
+      ? '✨ <b>写作手法</b>：检测到比喻词（像/仿佛/如），记得本体和喻体要有相似点，比喻才生动。'
+      : '💡 <b>写作手法</b>：本次要求运用比喻，可以用"像""仿佛""如"等词，把描写的事物比作另一种相似的事物。');
+  } else if (genre.includes('意象')) {
+    lines.push('💡 <b>写作手法</b>：意象叠加时，注意所选意象的情感色调要统一（都偏喜悦、或都偏忧愁），最后一句点明情感。');
+  } else {
+    lines.push('💡 <b>写作手法</b>：仔细对照范文，看看自己的句式结构是否与仿写要求相符。');
+  }
+
+  // 4. 叠词检查（对写景文）
+  const hasRepeat = /(.)\1/.test(text);
+  if ((genre.includes('写景') || currentArticle.id === 'chun') && hasRepeat) {
+    lines.push('🎵 <b>语言亮点</b>：使用了叠词，读起来更有节奏感，继续保持！');
+  }
+
+  // 5. 综合评价
+  const score = (used.length === baseWords.length ? 3 : used.length > 0 ? 2 : 1)
+              + (charCount >= 60 ? 2 : charCount >= 40 ? 1 : 0)
+              + (hasRepeat ? 1 : 0);
+  const level = score >= 5 ? '优秀 ⭐⭐⭐' : score >= 3 ? '良好 ⭐⭐' : '继续努力 ⭐';
+  lines.push(`<br>🏅 <b>综合评价</b>：${level}　继续加油，写作需要多读多练，你做得很好！`);
+
+  fb.className = 'feedback visible';
+  fb.innerHTML = '<div class="feedback-head">检查反馈</div>' + lines.join('<br>');
+  btn.disabled = false;
+}
+
+// ─── REVIEW ─────────────────────────────────────────────────────────────────
+let reviewQueue = [];
+let reviewIndex = 0;
+let reviewRevealed = false;
+
+function showReview() {
+  const due = getDueWords();
+  const total = Object.keys(learnedWords).length;
+
+  // stats
+  const streakKey = 'streak';
+  const lastStudy = localStorage.getItem('last_study_date');
+  const today = new Date().toDateString();
+  let streak = parseInt(localStorage.getItem('streak_count') || '0');
+  if (lastStudy !== today) {
+    if (lastStudy === new Date(Date.now() - 86400000).toDateString()) streak++;
+    else streak = 1;
+    localStorage.setItem('last_study_date', today);
+    localStorage.setItem('streak_count', streak);
+  }
+
+  const statsHtml = `
+    <div class="review-stats">
+      <div class="stat-box"><div class="stat-n">${total}</div><div class="stat-l">已加入词汇</div></div>
+      <div class="stat-box"><div class="stat-n" style="color:${due.length>0?'#c0392b':'#2d6a4f'}">${due.length}</div><div class="stat-l">今日待复习</div></div>
+      <div class="stat-box"><div class="stat-n" style="color:#b8860b">${streak}</div><div class="stat-l">连续学习天</div></div>
+    </div>
+  `;
+
+  if (due.length === 0) {
+    document.getElementById('right-content').innerHTML = statsHtml + `
+      <div class="no-review">
+        <div style="font-size:36px;margin-bottom:12px;">✓</div>
+        <div>今日复习已完成！</div>
+        <div style="margin-top:8px;font-size:13px;">继续阅读文章，<br>点击词汇加入复习库</div>
+      </div>
+    `;
+    return;
+  }
+
+  // build review queue with word data
+  reviewQueue = due.map(key => {
+    const [articleId, wid] = key.split('_');
+    const article = ARTICLES.find(a => a.id === articleId);
+    if (!article) return null;
+    const wordData = article.words[wid];
+    if (!wordData) return null;
+    // find a context sentence
+    const ctx = wordData.contexts[0];
+    return { key, word: wordData.word, pinyin: wordData.pinyin, def: wordData.def, context: ctx, articleTitle: article.title };
+  }).filter(Boolean);
+
+  reviewIndex = 0;
+  renderReviewCard(statsHtml);
+}
+
+function renderReviewCard(statsHtml) {
+  const content = document.getElementById('right-content');
+  if (reviewIndex >= reviewQueue.length) {
+    content.innerHTML = (statsHtml || '') + `<div class="no-review"><div style="font-size:36px;margin-bottom:12px;">🎉</div><div>本批复习完成！</div></div>`;
+    return;
+  }
+  const item = reviewQueue[reviewIndex];
+  content.innerHTML = (statsHtml || '') + `
+    <div class="review-flip">
+      <div style="font-size:11px;color:var(--ink3);margin-bottom:10px;text-transform:uppercase;letter-spacing:.06em;">来自《${item.articleTitle}》</div>
+      <div class="review-char">${item.word}</div>
+      <div class="review-ctx">${item.context ? item.context.text : ''}</div>
+      <button class="show-answer-btn" onclick="revealAnswer()">显示释义</button>
+      <div class="review-answer" id="review-answer">
+        <div style="font-size:12px;color:var(--ink3);margin-bottom:4px;">${item.pinyin}</div>
+        <div class="review-def">${item.def}</div>
+        <div style="font-size:11px;color:var(--ink3);margin-bottom:10px;">记住了吗？</div>
+        <div class="review-btns">
+          <button class="review-btn hard" onclick="rateReview(1)">困难<br><span style="font-size:10px;font-weight:400">明天再看</span></button>
+          <button class="review-btn ok" onclick="rateReview(2)">还好<br><span style="font-size:10px;font-weight:400">${Math.round((srsData[item.key]?.interval||1)*2.5)} 天后</span></button>
+          <button class="review-btn easy" onclick="rateReview(3)">轻松<br><span style="font-size:10px;font-weight:400">${Math.round((srsData[item.key]?.interval||1)*3.25)} 天后</span></button>
+        </div>
+      </div>
+    </div>
+    <div style="font-size:12px;color:var(--ink3);text-align:center;">第 ${reviewIndex+1} / ${reviewQueue.length} 个</div>
+  `;
+}
+
+function revealAnswer() {
+  document.getElementById('review-answer').classList.add('visible');
+  document.querySelector('.show-answer-btn').style.display = 'none';
+}
+
+function rateReview(ease) {
+  const item = reviewQueue[reviewIndex];
+  recordReview(item.key, ease);
+  reviewIndex++;
+  renderReviewCard();
+}
+
+
+function switchMode(mode) {
+  document.querySelectorAll('.nav-btn').forEach((b,i) => b.classList.toggle('active', ['read','vocab'][i]===mode));
+}
+
+// ─── START ───────────────────────────────────────────────────────────────────
+init();
+</script>
+</body>
+</html>
