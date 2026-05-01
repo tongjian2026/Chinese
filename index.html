@@ -70,6 +70,14 @@ body {
   cursor: pointer;
   transition: all 0.15s;
 }
+.grade-tabs { display: flex; gap: 4px; padding: 10px 10px 6px; }
+.grade-tab {
+  flex: 1; padding: 5px 4px; border-radius: 5px; border: 1px solid var(--border);
+  background: var(--paper); color: var(--ink3); font-size: 11px; cursor: pointer;
+  font-family: var(--sans); transition: all 0.15s;
+}
+.grade-tab:hover { color: var(--ink); background: var(--paper3); }
+.grade-tab.active { background: var(--ink); color: var(--paper); border-color: var(--ink); font-weight: 500; }
 .nav-btn:hover { color: var(--paper); background: rgba(255,255,255,0.08); }
 .nav-btn.active { color: var(--paper); background: rgba(255,255,255,0.14); }
 
@@ -754,7 +762,7 @@ w.learned:hover { background: rgba(45,106,79,0.2); }
 <body>
 
 <div class="header">
-  <div class="header-brand">语文<span>学堂</span> · 七年级</div>
+  <div class="header-brand">语文<span>学堂</span></div>
   <div class="header-nav">
     <button class="nav-btn active" onclick="switchMode('read')">📖 精读</button>
     <button class="nav-btn" onclick="switchMode('vocab')">📝 词库</button>
@@ -764,13 +772,22 @@ w.learned:hover { background: rgba(45,106,79,0.2); }
 <div class="layout">
   <!-- SIDEBAR -->
   <div class="sidebar">
-    <div class="sidebar-section">
-      <div class="sidebar-label">七年级上册</div>
-      <div id="sidebar-list-s1"></div>
+    <div class="grade-tabs">
+      <button class="grade-tab" data-grade="6" onclick="switchGrade(6)">六年级</button>
+      <button class="grade-tab active" data-grade="7" onclick="switchGrade(7)">七年级</button>
+      <button class="grade-tab" data-grade="8" onclick="switchGrade(8)">八年级</button>
     </div>
-    <div class="sidebar-section">
-      <div class="sidebar-label">七年级下册</div>
-      <div id="sidebar-list-s2"></div>
+    <div id="sidebar-grade-6" style="display:none;">
+      <div class="sidebar-section"><div class="sidebar-label">六年级上册</div><div id="sidebar-list-6a"></div></div>
+      <div class="sidebar-section"><div class="sidebar-label">六年级下册</div><div id="sidebar-list-6b"></div></div>
+    </div>
+    <div id="sidebar-grade-7">
+      <div class="sidebar-section"><div class="sidebar-label">七年级上册</div><div id="sidebar-list-s1"></div></div>
+      <div class="sidebar-section"><div class="sidebar-label">七年级下册</div><div id="sidebar-list-s2"></div></div>
+    </div>
+    <div id="sidebar-grade-8" style="display:none;">
+      <div class="sidebar-section"><div class="sidebar-label">八年级上册</div><div id="sidebar-list-8a"></div></div>
+      <div class="sidebar-section"><div class="sidebar-label">八年级下册</div><div id="sidebar-list-8b"></div></div>
     </div>
   </div>
 
@@ -1117,6 +1134,175 @@ const ARTICLES = [
       model_answer: '不闻父母叮嘱声，唯闻手机震动声。/昨夜见通知书，大学开学报名。/书单十二册，册册要买全。/东店买教材，西店买文具，南馆买台灯，北市买行囊。/旦辞家门去，暮宿宿舍间。/不闻父母叮咛声，但闻室友键盘声。',
     }
   },
+
+  // ── 六年级上册 ──
+  {
+    id: 'caochuanjiajian', grade: 6, semester: '6a', title: '草船借箭', author: '罗贯中（改编）',
+    tags: ['叙事', '历史故事', '人物刻画', '悬念'], type: 'prose',
+    upgradeWord: '妒忌', upgradeBase: '周瑜看到诸葛亮比自己厉害，心里很不高兴。',
+    tip: '本文按"起因—经过—结果"叙事，通过语言、动作描写刻画人物性格。诸葛亮的"神机妙算"与周瑜的"妒忌"形成对比。注意体会"大雾漫天"等环境描写对情节的烘托作用。',
+    paragraphs: [
+      '周瑜看到诸葛亮挺有才干，心里很<w id="duji">妒忌</w>。有一天，周瑜请诸葛亮商议军事，说："我们就要跟曹军交战。水上交战，用什么兵器最好？"诸葛亮说："用弓箭最好。"周瑜说："对，先生跟我想的一样。现在军中缺箭，想请先生负责赶造十万支，这是公事，希望先生不要推却。"',
+      '这时候大雾<w id="mantian">漫天</w>，江上连面对面都看不清。天还没亮，船已经靠近曹军的水寨。诸葛亮下令把船头朝西，船尾朝东，一字摆开，又叫船上的军士一边擂鼓，一边大声呐喊。',
+      '曹操听到鼓声和呐喊声，就下令说："江上雾很大，敌人忽然来攻，我们看不清虚实，不要<w id="qingju">轻举妄动</w>。叫弓弩手朝他们射箭，不让他们近前。"',
+      '天渐渐亮了，雾还没有散，这时候，船两边的草把子上都插满了箭。诸葛亮吩咐军士们齐声高喊："谢谢曹丞相的箭！"随着一声令下，二十条船驶回南岸。曹操知道上了当，可是这边的船顺风顺水，已经飞一样地驶出二十多里，要追也来不及了。',
+    ],
+    words: {
+      duji: { word: '妒忌', pinyin: 'dù jì', def: '对才能、名誉比自己好的人心怀怨恨。周瑜的妒忌是全文矛盾冲突的根源。', contexts: [
+        { text: '周瑜看到诸葛亮挺有才干，心里很<b>妒忌</b>。', src: '《草船借箭》·六上' },
+        { text: '她从不<b>妒忌</b>别人的成功，而是把别人的优点当作自己努力的方向。', src: '人物描写语料' },
+      ]},
+      mantian: { word: '漫天', pinyin: 'màn tiān', def: '遍布天空，形容范围极广。"大雾漫天"是诸葛亮借箭成功的关键自然条件。', contexts: [
+        { text: '大雾<b>漫天</b>，江上连面对面都看不清。', src: '《草船借箭》·六上' },
+        { text: '大雪<b>漫天</b>飞舞，整个世界变成了白色。', src: '写景散文语料' },
+      ]},
+      qingju: { word: '轻举妄动', pinyin: 'qīng jǔ wàng dòng', def: '不经慎重考虑，轻率地采取行动。曹操的谨慎反而成全了诸葛亮的计策。', contexts: [
+        { text: '不要<b>轻举妄动</b>，叫弓弩手朝他们射箭，不让他们近前。', src: '《草船借箭》·六上' },
+        { text: '面对复杂的局势，他告诫自己不要<b>轻举妄动</b>，要等待最佳时机。', src: '议论文语料' },
+      ]},
+    },
+    practice: {
+      prompt: '仿照《草船借箭》用"起因—经过—结果"的结构，简短叙述一件你或你认识的人"以智取胜"的小故事（100-150字），注意通过人物的语言或动作体现人物的聪明或性格。',
+      words: ['妒忌', '漫天', '轻举妄动'],
+      model_answer: '上周数学竞赛，同组的小李一直妒忌我的成绩，故意不告诉我考试时间变了。大雾漫天般的紧张气氛里，我偶然看到公告栏，才发现他的把戏。我没有轻举妄动，只是平静地走进考场，用成绩说话。结果出来，我排第一，他反而因为紧张发挥失常。',
+    }
+  },
+  {
+    id: 'qiongren', grade: 6, semester: '6a', title: '穷人', author: '列夫·托尔斯泰',
+    tags: ['叙事', '外国文学', '心理描写', '对比'], type: 'prose',
+    upgradeWord: '忐忑不安', upgradeBase: '桑娜心里很紧张，不知道该怎么办。',
+    tip: '本文通过环境描写（屋外风暴与室内温暖对比）衬托穷人善良。心理描写是最大亮点——桑娜的内心独白几乎占全文一半，写出善良的代价与重量。注意：好的心理描写不说"我很紧张"，而是用破碎的念头展现。',
+    paragraphs: [
+      '屋外寒风呼啸，汹涌澎湃的海浪拍击着海岸，溅起阵阵浪花。海上正起着风暴，外面又黑又冷，这间渔家的小屋里却温暖而<w id="shushi">舒适</w>。',
+      '桑娜用头巾裹住睡着的孩子，把他们抱回家里。她的心<w id="tdba">忐忑不安</w>地跳动着，她自己也不知道为什么要这样做，但是觉得非这样做不可。',
+      '"他会说什么呢？这是闹着玩的吗？自己的五个孩子已经够他受的了……是他来啦？……不，还没来！……为什么把他们抱过来啊？……他会揍我的！那也活该，我自作自受……嗯，揍我一顿也好！"',
+      '渔夫皱起眉，他的脸变得严肃、<w id="youlu">忧虑</w>。"嗯，是个问题！"他搔搔后脑勺说，"你看怎么办？得把他们抱来，同死人待在一起怎么行！哦，我们，我们总能熬过去的！快去！别等他们醒来。"',
+    ],
+    words: {
+      shushi: { word: '舒适', pinyin: 'shū shì', def: '舒服安逸。与屋外"寒风呼啸"形成强烈对比，衬托渔家虽穷但温暖的生活。', contexts: [
+        { text: '这间渔家的小屋里却温暖而<b>舒适</b>。', src: '《穷人》托尔斯泰·六上' },
+        { text: '候车室里暖气十足，旅客们坐得<b>舒适</b>，纷纷打起了盹。', src: '叙事文语料' },
+      ]},
+      tdba: { word: '忐忑不安', pinyin: 'tǎn tè bù ān', def: '心神不定、七上八下的样子。精准写出桑娜做了好事却担忧后果的复杂心理。', contexts: [
+        { text: '她的心<b>忐忑不安</b>地跳动着，她自己也不知道为什么要这样做。', src: '《穷人》托尔斯泰·六上' },
+        { text: '考试结果还没出来，他<b>忐忑不安</b>地等了整整一个下午。', src: '叙事文语料' },
+      ]},
+      youlu: { word: '忧虑', pinyin: 'yōu lǜ', def: '忧愁担心。渔夫的"忧虑"与之后毅然决定"抱回来"形成转折，体现善良的坚定。', contexts: [
+        { text: '他的脸变得严肃、<b>忧虑</b>。', src: '《穷人》托尔斯泰·六上' },
+        { text: '母亲望着窗外阴沉的天色，眉头紧锁，满脸<b>忧虑</b>。', src: '人物描写语料' },
+      ]},
+    },
+    practice: {
+      prompt: '仿照《穷人》中桑娜的心理描写，写一段人物内心独白（60-100字）：某人做了一件好事，但担心会被责怪，写出他/她内心的矛盾与挣扎。注意用"……"表示思绪的停顿与跳跃。',
+      words: ['忐忑不安', '忧虑', '舒适'],
+      model_answer: '我把同学落下的钱包交给了老师。但我的心忐忑不安地跳着——他会不会以为是我拿了里面的钱？……不，我什么都没动……可万一他忧虑呢……算了，做了就做了。我深吸一口气，尽量让自己的表情看起来舒适自然，走出了办公室。',
+    }
+  },
+  {
+    id: 'nageXingqitian', grade: 6, semester: '6b', title: '那个星期天', author: '史铁生',
+    tags: ['散文', '心理描写', '成长', '以景衬情'], type: 'prose',
+    upgradeWord: '惆怅', upgradeBase: '等了一整天，妈妈没有带我出去，我很失望。',
+    tip: '本文写一个孩子等待母亲带他出去玩的一天，情感从"期待"到"绝望"。史铁生通过光线变化烘托心情，是"以景衬情"的典范。注意：全文没有一句直接说"我很失望"，但失望之情无处不在。',
+    paragraphs: [
+      '那是个星期天，从早晨到下午，一直到天色昏暗下去。那个星期天我从希望到<w id="shiwang">失望</w>，从仍在希望到终于<w id="juewang">绝望</w>，一整天我就那么等待。',
+      '我踏着一块块方砖跳，跳房子，等母亲回来。我看着天看着云彩走，等母亲回来。我蹲在院子的地上，用树枝拨弄着一个蚁穴，<w id="dengdai">等</w>，慢慢地等待。',
+      '下午，光线从窗户慢慢移走，屋里越来越暗，我<w id="chouachang">惆怅</w>地看着窗外，心里空空的，觉得自己整个下午都白等了。',
+      '我感到母亲惊惶地看着我，还用手轻轻抚摸我的头发，多少次了，多少次了，我已经不记得。只记得有一天母亲抱住了我，我把脸埋在她的怀里，委屈地哭了很久很久。',
+    ],
+    words: {
+      shiwang: { word: '失望', pinyin: 'shī wàng', def: '希望落空后感到不满或灰心。与"希望"在文中反复交替，写出等待过程中情绪的反复。', contexts: [
+        { text: '那个星期天我从希望到<b>失望</b>，从仍在希望到终于绝望。', src: '《那个星期天》史铁生·六下' },
+        { text: '他<b>失望</b>地低下头，但没有放弃，又重新拿起了笔。', src: '叙事文语料' },
+      ]},
+      juewang: { word: '绝望', pinyin: 'jué wàng', def: '完全丧失希望，是全文情绪的终点，与开头的"希望"构成完整的情感弧线。', contexts: [
+        { text: '从仍在希望到终于<b>绝望</b>，一整天我就那么等待。', src: '《那个星期天》史铁生·六下' },
+        { text: '不到最后一刻，不要轻易说<b>绝望</b>。', src: '议论文语料' },
+      ]},
+      chouachang: { word: '惆怅', pinyin: 'chóu chàng', def: '伤感失意的情绪。与"光线移走、屋里变暗"的环境描写配合，以景衬情。', contexts: [
+        { text: '我<b>惆怅</b>地看着窗外，心里空空的。', src: '《那个星期天》史铁生·六下' },
+        { text: '望着空荡荡的操场，他心中涌起一阵莫名的<b>惆怅</b>。', src: '散文语料' },
+      ]},
+      dengdai: { word: '等待', pinyin: 'děng dài', def: '"等"字在文中反复出现，构成本文最核心的情感动词，写尽了孩子漫长而落空的一天。', contexts: [
+        { text: '用树枝拨弄着一个蚁穴，<b>等</b>，慢慢地等待。', src: '《那个星期天》史铁生·六下' },
+        { text: '<b>等待</b>本身也是一种成长，让你学会了耐心，也学会了接受。', src: '议论文语料' },
+      ]},
+    },
+    practice: {
+      prompt: '仿照史铁生"以景衬情"的写法，描写一段等待的经历（等人、等消息、等结果均可）：不直接说自己的心情，而是通过周围环境（光线、声音、时间流逝）来表现情绪变化，80-120字。',
+      words: ['惆怅', '失望', '等待'],
+      model_answer: '那天下午，我坐在窗边等成绩公布。光线从左边慢慢移到右边，又从右边消失在墙角。窗外的麻雀跳了又飞，飞了又回来，什么也不知道。屋里越来越暗，我惆怅地盯着手机屏幕，那个页面还是空白。失望像水一样慢慢漫进心里。等待让时间变得漫长，漫长得像整整一辈子。',
+    }
+  },
+
+  // ── 八年级上册 ──
+  {
+    id: 'beiying', grade: 8, semester: '8a', title: '背影', author: '朱自清',
+    tags: ['散文', '父子情', '细节描写', '动词'], type: 'prose',
+    upgradeWord: '蹒跚', upgradeBase: '父亲走路不太稳，一步一步很慢。',
+    tip: '本文四次写"背影"，以父亲买橘子翻越月台的背影为核心。关键写法：用"探""攀""缩""微倾"四个动词连续描写动作，不直接写情感，却让读者自己感动。这是"动词精准"写法的典范。',
+    paragraphs: [
+      '我说道："爸爸，你走吧。"他往车外看了看说："我买几个橘子去。你就在此地，不要走动。"我看那边月台的栅栏外有几个卖东西的等着顾客。走到那边月台，须穿过铁道，须跳下去又爬上去。父亲是一个胖子，走过去自然要费事些。',
+      '我看见他<w id="panshan">蹒跚</w>地走到铁道边，慢慢探身下去，尚不大难。可是他穿过铁道，要爬上那边月台，就不容易了。他用两手<w id="panzhu">攀</w>着上面，两脚再向上<w id="suoqi">缩</w>；他肥胖的身子向左微倾，显出努力的样子，这时我看见他的背影，我的泪很快地流下来了。',
+      '他走了几步，回头看见我，说："进去吧，里边没人。"等他的背影混入来来往往的人里，再找不着了，我便进来坐下，我的眼泪又来了。',
+    ],
+    words: {
+      panshan: { word: '蹒跚', pinyin: 'pán shān', def: '腿脚不灵便、走路缓慢摇摆的样子。一个词写出父亲年迈体胖、行动不便的形象，令人心疼。', contexts: [
+        { text: '我看见他<b>蹒跚</b>地走到铁道边，慢慢探身下去。', src: '《背影》朱自清·八上' },
+        { text: '老人<b>蹒跚</b>地走在积雪的小路上，每一步都走得很小心。', src: '叙事文语料' },
+      ]},
+      panzhu: { word: '攀', pinyin: 'pān', def: '抓住东西向上爬。精准写出父亲用手抓住月台边缘、用力向上的动作，力量感与艰难感并存。', contexts: [
+        { text: '他用两手<b>攀</b>着上面，两脚再向上缩。', src: '《背影》朱自清·八上' },
+        { text: '他<b>攀</b>上树干，伸手摘下那颗最高处的苹果，递给了弟弟。', src: '叙事文语料' },
+      ]},
+      suoqi: { word: '缩', pinyin: 'suō', def: '向内收缩。与"攀"配合，写出父亲翻越月台时艰难的连续动作，动词的精准是本段最大的写作技巧。', contexts: [
+        { text: '两脚再向上<b>缩</b>；他肥胖的身子向左微倾，显出努力的样子。', src: '《背影》朱自清·八上' },
+        { text: '小猫<b>缩</b>成一团，蜷在角落里，睁着两只大眼睛看着外面的雨。', src: '描写语料' },
+      ]},
+    },
+    practice: {
+      prompt: '仿照朱自清描写父亲翻越月台的动作写法，选择一个让你感动的动作场景（父母帮你做某件事、长辈弯腰捡东西等），用3-5个精准动词连续描写，80-120字，不直接写"我很感动"。',
+      words: ['蹒跚', '攀', '缩'],
+      model_answer: '奶奶蹒跚地走进厨房，先摸了摸煤气灶，弯腰从橱柜底层攀出那口大锅，缩着身子放到灶上，再直起腰，慢慢地打开水龙头。她不知道我已经站在门口看了很久。那双手，青筋突出，却稳稳地端着那碗汤，一步一步朝我走来。',
+    }
+  },
+  {
+    id: 'taoyuanji', grade: 8, semester: '8b', title: '桃花源记', author: '陶渊明',
+    tags: ['文言文', '叙事', '理想社会', '白描'], type: 'classical',
+    upgradeWord: '俨然', upgradeBase: '村子里的房子整整齐齐，很有秩序。',
+    tip: '本文以渔人误入桃花源为线索，用"发现—进入—离开—再寻"的结构，描绘理想社会。"土地平旷，屋舍俨然"是典型白描：不加修辞，以简洁语言勾勒画面，每个词都是精准的名词或形容词，没有多余的字。',
+    paragraphs: [
+      '晋太元中，武陵人捕鱼为业。缘溪行，忘路之远近。忽逢桃花林，夹岸数百步，中无杂树，<w id="fangcao">芳草</w>鲜美，落英<w id="binfen8">缤纷</w>，渔人甚异之。',
+      '复前行，欲穷其林。林尽水源，便得一山，山有小口，仿佛若有光。便<w id="sheli8">舍</w>船，从口入。',
+      '土地平旷，屋舍<w id="yanran8">俨然</w>，有良田、美池、桑竹之属。阡陌交通，鸡犬相闻。其中往来种作，男女衣着，悉如外人。黄发垂髫，并<w id="yiran8">怡然</w>自乐。',
+      '见渔人，乃大惊，问所从来。具答之。便要还家，设酒杀鸡作食。村中闻有此人，咸来问讯。自云先世避秦时乱，率妻子邑人来此绝境，不复出焉，遂与外人间隔。',
+    ],
+    words: {
+      fangcao: { word: '芳草', pinyin: 'fāng cǎo', def: '香草。"芳草鲜美"写桃花林地面芬芳翠绿，色、香俱全，呈现世外仙境般的美好。', contexts: [
+        { text: '中无杂树，<b>芳草</b>鲜美，落英缤纷。', src: '《桃花源记》陶渊明·八下' },
+        { text: '离离原上草，一岁一枯荣。远<b>芳</b>侵古道，晴翠接荒城。', src: '《赋得古原草送别》白居易' },
+      ]},
+      binfen8: { word: '缤纷', pinyin: 'bīn fēn', def: '繁多而色彩纷呈。写落花飘落，满地缤纷，画面浪漫梦幻。', contexts: [
+        { text: '落英<b>缤纷</b>，渔人甚异之。', src: '《桃花源记》陶渊明·八下' },
+        { text: '秋叶<b>缤纷</b>落下，像一场安静的告别。', src: '课外散文' },
+      ]},
+      yanran8: { word: '俨然', pinyin: 'yǎn rán', def: '整齐的样子。"屋舍俨然"用极简白描，写出桃花源井井有条的秩序感，不加一个多余的字。', contexts: [
+        { text: '土地平旷，屋舍<b>俨然</b>，有良田、美池、桑竹之属。', src: '《桃花源记》陶渊明·八下' },
+        { text: '书架上的书<b>俨然</b>排列，按高矮分好类，一本也不乱。', src: '仿写语料' },
+      ]},
+      yiran8: { word: '怡然', pinyin: 'yí rán', def: '安适愉快的样子。"怡然自乐"写桃花源中人无忧无虑、自给自足的幸福状态。', contexts: [
+        { text: '黄发垂髫，并<b>怡然</b>自乐。', src: '《桃花源记》陶渊明·八下' },
+        { text: '老人坐在院子里晒太阳，神情<b>怡然</b>，好像什么都不用担心。', src: '叙事文语料' },
+      ]},
+      sheli8: { word: '舍（弃）', pinyin: 'shě', def: '放弃、离开（此义）。"舍船从口入"写渔人果断弃船探路，推动情节发展的关键动作。', contexts: [
+        { text: '便<b>舍</b>船，从口入。', src: '《桃花源记》陶渊明·八下' },
+      ]},
+    },
+    practice: {
+      prompt: '仿照陶渊明"土地平旷，屋舍俨然……"的白描手法，用简洁的语言描写一处你理想中的居所或你喜欢的某个地方，要求句式简短、每句不超过10字、有画面感，80-100字。',
+      words: ['俨然', '怡然', '缤纷'],
+      model_answer: '院落宽阔，绿植俨然，有石桌、藤椅、书架之属。走道蜿蜒，猫狗相伴。其中晨读暮写，四季皆宜，悉如梦境。白发老者与垂髫小童，并怡然自乐。窗外缤纷花瓣随风飘落，人在其中，浑忘岁月。',
+    }
+  },
 ];
 
 // SRS DATA (localStorage simulation via JS object)
@@ -1180,24 +1366,54 @@ function init() {
   loadArticle(ARTICLES[0]);
 }
 
+function switchGrade(g) {
+  [6,7,8].forEach(n => {
+    document.getElementById('sidebar-grade-' + n).style.display = n === g ? 'block' : 'none';
+  });
+  document.querySelectorAll('.grade-tab').forEach(el => {
+    el.classList.toggle('active', parseInt(el.dataset.grade) === g);
+  });
+}
+
 function buildSidebar() {
-  const s1 = document.getElementById('sidebar-list-s1');
-  const s2 = document.getElementById('sidebar-list-s2');
   ARTICLES.forEach(a => {
     const el = document.createElement('div');
-    el.className = 'article-item' + (a.id === currentArticle.id ? ' active' : '');
+    el.className = 'article-item';
     el.id = 'nav-' + a.id;
     const typeLabel = a.type === 'poem' ? '诗' : a.type === 'classical' ? '古文' : '散文';
     const typeClass = a.type === 'poem' ? 'type-poem' : a.type === 'classical' ? 'type-classical' : 'type-prose';
     el.innerHTML = `<span class="article-dot"></span>${a.title}<span class="article-type ${typeClass}">${typeLabel}</span>`;
     el.onclick = () => loadArticle(a);
-    (a.semester === 1 ? s1 : s2).appendChild(el);
+
+    // Route to correct list by semester value
+    let targetId = null;
+    const s = String(a.semester);
+    if (s === '1' || s === 's1') targetId = 'sidebar-list-s1';
+    else if (s === '2' || s === 's2') targetId = 'sidebar-list-s2';
+    else if (s === '6a') targetId = 'sidebar-list-6a';
+    else if (s === '6b') targetId = 'sidebar-list-6b';
+    else if (s === '8a') targetId = 'sidebar-list-8a';
+    else if (s === '8b') targetId = 'sidebar-list-8b';
+
+    if (targetId) {
+      const container = document.getElementById(targetId);
+      if (container) container.appendChild(el);
+    }
   });
+
+  // Mark first article active
+  const firstNav = document.getElementById('nav-' + ARTICLES[0].id);
+  if (firstNav) firstNav.classList.add('active');
 }
 
 function loadArticle(article) {
   currentArticle = article;
   currentWord = null;
+
+  // Auto-switch to correct grade tab
+  const s = String(article.semester);
+  const grade = s.startsWith('6') ? 6 : s.startsWith('8') ? 8 : 7;
+  switchGrade(grade);
 
   document.querySelectorAll('.article-item').forEach(el => el.classList.remove('active'));
   const navEl = document.getElementById('nav-' + article.id);
@@ -1747,6 +1963,7 @@ function showStats() {
 }
 
 
+function switchMode(mode) {
   document.querySelectorAll('.nav-btn').forEach((b,i) => b.classList.toggle('active', ['read','vocab'][i]===mode));
 }
 
