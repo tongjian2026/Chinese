@@ -203,7 +203,7 @@ body {
 }
 .article-body p { margin-bottom: 1.2em; }
 
-.w {
+w {
   background: linear-gradient(180deg, transparent 60%, rgba(184,134,11,0.25) 60%);
   cursor: pointer;
   border-radius: 2px;
@@ -211,9 +211,9 @@ body {
   padding: 0 1px;
   transition: background 0.15s;
 }
-.w:hover { background: rgba(184,134,11,0.2); }
-.w.learned { background: linear-gradient(180deg, transparent 60%, rgba(45,106,79,0.3) 60%); }
-.w.learned:hover { background: rgba(45,106,79,0.2); }
+w:hover { background: rgba(184,134,11,0.2); }
+w.learned { background: linear-gradient(180deg, transparent 60%, rgba(45,106,79,0.3) 60%); }
+w.learned:hover { background: rgba(45,106,79,0.2); }
 
 .writing-tip {
   margin-top: 24px;
@@ -956,7 +956,7 @@ function loadArticle(article) {
   `;
 
   // attach word click
-  document.querySelectorAll('.w').forEach(el => {
+  document.querySelectorAll('w').forEach(el => {
     const wid = el.id;
     if (article.words[wid]) {
       if (learnedWords[currentArticle.id + '_' + wid]) el.classList.add('learned');
