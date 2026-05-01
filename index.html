@@ -448,6 +448,85 @@ w.learned:hover { background: rgba(45,106,79,0.2); }
 
 .no-review { text-align: center; padding: 40px 20px; color: var(--ink3); font-size: 14px; }
 
+/* ─── UPGRADE CHALLENGE ─── */
+.upgrade-section {
+  margin-top: 18px;
+  padding: 14px 16px;
+  background: var(--paper2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  border-left: 3px solid var(--gold);
+}
+.upgrade-label { font-size: 11px; font-weight: 500; letter-spacing: .08em; color: var(--gold); margin-bottom: 6px; }
+.upgrade-desc { font-size: 13px; color: var(--ink2); line-height: 1.6; margin-bottom: 8px; }
+.upgrade-original {
+  font-family: var(--serif);
+  font-size: 14px;
+  color: var(--ink3);
+  padding: 8px 12px;
+  background: var(--paper);
+  border-radius: 4px;
+  border: 1px dashed var(--border);
+}
+
+/* ─── PLAN ─── */
+.plan-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-bottom: 16px; }
+.plan-stat { background: var(--paper2); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px; text-align: center; }
+.plan-stat-n { font-family: var(--serif); font-size: 20px; font-weight: 700; color: var(--ink); }
+.plan-stat-l { font-size: 10px; color: var(--ink3); margin-top: 2px; }
+
+.plan-week { display: flex; gap: 4px; margin-bottom: 14px; overflow-x: auto; padding-bottom: 4px; }
+.plan-day {
+  flex-shrink: 0;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 8px 6px; border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--paper2);
+  min-width: 52px; font-size: 11px; color: var(--ink3);
+  gap: 3px;
+}
+.plan-day.today { border-color: var(--gold); background: var(--gold-light); color: var(--ink); }
+.plan-day.past { opacity: 0.5; }
+.plan-day-num { font-size: 10px; }
+.plan-day-icon { font-size: 18px; }
+.plan-day-title { font-size: 10px; text-align: center; line-height: 1.3; }
+
+.plan-today {
+  background: var(--paper2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.plan-today-head {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 8px;
+}
+.plan-done-badge {
+  font-size: 11px; padding: 2px 8px;
+  background: var(--green-light); color: var(--green);
+  border: 1px solid rgba(45,106,79,0.2); border-radius: 20px;
+}
+.plan-today-desc { font-size: 13px; color: var(--ink2); line-height: 1.7; margin-bottom: 10px; }
+.plan-today-task {
+  font-size: 13px; color: var(--ink);
+  background: var(--paper); border: 1px solid var(--border);
+  border-radius: 6px; padding: 8px 12px;
+}
+.plan-task-label { font-size: 10px; letter-spacing: .08em; color: var(--ink3); margin-bottom: 4px; }
+
+.plan-section-title { font-size: 11px; letter-spacing: .1em; color: var(--ink3); margin: 14px 0 8px; text-transform: uppercase; }
+
+.activity-item {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; color: var(--ink2);
+  padding: 6px 0; border-bottom: 1px solid var(--paper3);
+}
+.activity-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+.activity-item span:nth-child(2) { flex: 1; }
+.activity-chars { color: var(--ink3); font-size: 11px; }
+.activity-date { color: var(--ink3); font-size: 11px; white-space: nowrap; }
+
 /* ─── EMPTY STATE ─── */
 .empty-word { text-align: center; padding: 40px 20px; color: var(--ink3); }
 .empty-word-char { font-family: var(--serif); font-size: 48px; color: var(--paper3); margin-bottom: 12px; }
@@ -497,6 +576,179 @@ w.learned:hover { background: rgba(45,106,79,0.2); }
   cursor: pointer;
   font-family: var(--sans);
 }
+
+/* ─── WEEKLY PLAN ─── */
+.plan-header {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink2);
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.plan-progress-ring {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--ink3);
+}
+.plan-day {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 8px;
+  transition: box-shadow 0.15s;
+}
+.plan-day:hover { box-shadow: var(--shadow); }
+.plan-day-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  background: var(--paper2);
+  user-select: none;
+}
+.plan-day-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 500;
+  background: var(--paper3);
+  color: var(--ink3);
+  flex-shrink: 0;
+}
+.plan-day.today .plan-day-num { background: var(--gold); color: white; }
+.plan-day.done .plan-day-num { background: var(--green); color: white; }
+.plan-day-title { font-size: 13px; font-weight: 500; flex: 1; }
+.plan-day.today .plan-day-title { color: var(--gold); }
+.plan-day.done .plan-day-title { color: var(--green); }
+.plan-day-badge {
+  font-size: 10px; padding: 2px 7px;
+  border-radius: 10px; font-weight: 500;
+}
+.badge-today { background: var(--gold-light); color: var(--gold); }
+.badge-done { background: var(--green-light); color: var(--green); }
+.badge-lock { background: var(--paper3); color: var(--ink3); }
+.plan-day-body {
+  padding: 12px 14px;
+  display: none;
+  border-top: 1px solid var(--border);
+  background: white;
+}
+.plan-day-body.open { display: block; }
+.plan-task {
+  display: flex; gap: 8px; align-items: flex-start;
+  margin-bottom: 8px; font-size: 13px; line-height: 1.6;
+}
+.plan-task-check {
+  width: 16px; height: 16px; margin-top: 2px;
+  border: 1.5px solid var(--border); border-radius: 3px;
+  cursor: pointer; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; transition: all 0.15s;
+}
+.plan-task-check.checked { background: var(--green); border-color: var(--green); color: white; }
+.plan-task-text { color: var(--ink2); }
+.plan-task-text.checked { text-decoration: line-through; color: var(--ink3); }
+.plan-jump-btn {
+  margin-top: 10px; width: 100%;
+  padding: 7px; font-size: 12px;
+  background: var(--ink); color: var(--paper);
+  border: none; border-radius: 6px; cursor: pointer;
+  font-family: var(--sans);
+}
+
+/* ─── VARIANT TRAINING ─── */
+.variant-section {
+  margin-top: 16px;
+  border: 1px solid rgba(184,134,11,0.25);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.variant-header {
+  background: var(--gold-light);
+  padding: 10px 14px;
+  font-size: 12px; font-weight: 500; color: var(--gold);
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer;
+}
+.variant-body { padding: 14px; display: none; }
+.variant-body.open { display: block; }
+.variant-prompt { font-size: 13px; color: var(--ink2); margin-bottom: 10px; line-height: 1.7; }
+.variant-original {
+  background: var(--paper2); border-left: 3px solid var(--border);
+  padding: 8px 12px; font-size: 13px; color: var(--ink2);
+  margin-bottom: 10px; border-radius: 0 4px 4px 0;
+  font-family: var(--serif); line-height: 1.8;
+}
+.variant-area {
+  width: 100%; padding: 10px 12px;
+  border: 1px solid var(--border); border-radius: 6px;
+  font-size: 13px; font-family: var(--serif);
+  background: white; color: var(--ink);
+  resize: none; min-height: 70px; outline: none;
+  line-height: 1.8;
+}
+.variant-area:focus { border-color: var(--gold); }
+.variant-check-btn {
+  margin-top: 8px; width: 100%;
+  padding: 7px; font-size: 12px; font-weight: 500;
+  background: transparent; color: var(--gold);
+  border: 1px solid var(--gold); border-radius: 6px;
+  cursor: pointer; font-family: var(--sans);
+}
+.variant-feedback {
+  margin-top: 8px; padding: 10px 12px;
+  background: var(--gold-light); border-radius: 6px;
+  font-size: 12px; color: var(--ink2); line-height: 1.7;
+  display: none;
+}
+.variant-feedback.open { display: block; }
+
+/* ─── STATS ─── */
+.stats-panel {
+  padding: 4px 0;
+}
+.stats-title {
+  font-size: 11px; font-weight: 500; color: var(--ink3);
+  letter-spacing: .1em; text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.stats-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 8px; margin-bottom: 16px;
+}
+.stats-card {
+  background: var(--paper2); border-radius: var(--radius);
+  padding: 12px; text-align: center;
+}
+.stats-num { font-size: 26px; font-weight: 300; color: var(--ink); font-family: var(--serif); }
+.stats-lbl { font-size: 11px; color: var(--ink3); margin-top: 2px; }
+.writing-log { margin-top: 4px; }
+.log-item {
+  padding: 8px 12px;
+  border-left: 3px solid var(--border);
+  margin-bottom: 8px;
+  background: var(--paper2);
+  border-radius: 0 6px 6px 0;
+}
+.log-item-title { font-size: 12px; font-weight: 500; color: var(--ink2); }
+.log-item-meta { font-size: 11px; color: var(--ink3); margin-top: 2px; }
+.log-item-words { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 5px; }
+.log-word-chip {
+  font-size: 10px; padding: 1px 7px;
+  background: var(--green-light); color: var(--green);
+  border-radius: 10px;
+}
+.empty-log {
+  text-align: center; padding: 32px 16px;
+  color: var(--ink3); font-size: 13px;
+}
 </style>
 </head>
 <body>
@@ -535,6 +787,8 @@ w.learned:hover { background: rgba(45,106,79,0.2); }
         <button class="right-tab active" onclick="switchTab('word')">词汇</button>
         <button class="right-tab" onclick="switchTab('practice')">仿写</button>
         <button class="right-tab" onclick="switchTab('review')">复习</button>
+        <button class="right-tab" onclick="switchTab('plan')">本周计划</button>
+        <button class="right-tab" onclick="switchTab('stats')">学习记录</button>
       </div>
       <div class="right-content" id="right-content">
         <div class="empty-word">
@@ -553,6 +807,7 @@ const ARTICLES = [
   // 七年级上册
   {
     id: 'chun', semester: 1, title: '春', author: '朱自清',
+    upgradeWord: '仿佛', upgradeBase: '树枝在风中摇动，花瓣飘落下来。',
     tags: ['散文', '写景抒情', '拟人·比喻', '总分结构'],
     type: 'prose',
     tip: '本文运用"总—分—总"结构：开篇总写春天来临，中间分写春草、春花、春风、春雨、迎春五幅图，结尾总收升华。大量运用<strong>拟人</strong>（"小草偷偷地从土里钻出来"）和<strong>比喻</strong>（"春天像刚落地的娃娃"），语言节奏明快，叠词运用娴熟。',
@@ -597,6 +852,7 @@ const ARTICLES = [
   },
   {
     id: 'jinan', semester: 1, title: '济南的冬天', author: '老舍',
+    upgradeWord: '镶', upgradeBase: '山顶上有白雪，蓝天在旁边。',
     tags: ['散文', '写景', '比喻·拟人', '情景交融'],
     type: 'prose',
     tip: '老舍将济南冬天的温晴与北京的寒风、伦敦的阴暗对比，突出济南的"宝地"特点。写山用"小摇篮"比喻，写水突出"绿"字。本文情感基调温暖，用词精准，值得体会"恰到好处"的分寸感。',
@@ -644,6 +900,7 @@ const ARTICLES = [
   },
   {
     id: 'sanbu', semester: 1, title: '散步', author: '莫怀戚',
+    upgradeWord: '粼粼', upgradeBase: '池塘里的水在阳光下闪光。',
     tags: ['散文', '叙事', '以小见大', '家庭伦理'],
     type: 'prose',
     tip: '本文叙述一家三代散步的小事，却通过"我"背母亲、妻子背儿子的细节，写出生命的传承与责任。"以小见大"是本文最重要的写法：选取日常小事，挖掘深刻主题。注意文末"整个世界"的哲学升华。',
@@ -683,6 +940,7 @@ const ARTICLES = [
   },
   {
     id: 'lunyu', semester: 1, title: '《论语》十二章', author: '孔子及弟子',
+    upgradeWord: '温故', upgradeBase: '复习旧知识，能学到新东西。',
     tags: ['文言文', '语录体', '修身·为学', '儒家思想'],
     type: 'classical',
     tip: '《论语》是语录体散文，每章独立，理解重在"炼字"。核心概念：学与思（学而不思则罔）、仁（己所不欲勿施于人）、时（学而时习之）。文言文阅读首要任务：逐字落实，再整体贯通。',
@@ -727,6 +985,7 @@ const ARTICLES = [
   },
   {
     id: 'ciguanhai', semester: 1, title: '观沧海', author: '曹操',
+    upgradeWord: '涌起', upgradeBase: '海浪很大，声音也很响。',
     tags: ['古诗', '四言诗', '借景抒情', '壮志豪情'],
     type: 'poem',
     tip: '《观沧海》是中国现存最早的完整山水诗，写曹操北征乌桓途中登碣石山所见。"日月之行，若出其中；星汉灿烂，若出其里"是虚写（想象），表现胸怀天下的豪情壮志。实写与虚写的结合是本诗重点。',
@@ -773,6 +1032,7 @@ const ARTICLES = [
   // 七年级下册
   {
     id: 'choutu', semester: 2, title: '从百草园到三味书屋', author: '鲁迅',
+    upgradeWord: '低唱', upgradeBase: '虫子在草丛里叫着。',
     tags: ['散文', '回忆性', '对比结构', '童年视角'],
     type: 'prose',
     tip: '本文以"从……到……"为题，暗含对比结构：百草园（自由乐园）vs 三味书屋（束缚课堂）。鲁迅用儿童视角写百草园，细节生动；写三味书屋，于平淡中含批判。注意"不必说……也不必说……单是……"的句式，是精读仿写的重点句型。',
@@ -815,6 +1075,7 @@ const ARTICLES = [
   },
   {
     id: 'mulan', semester: 2, title: '木兰诗', author: '北朝民歌',
+    upgradeWord: '扑朔迷离', upgradeBase: '这件事很复杂，很难分清。',
     tags: ['古诗', '乐府诗', '叙事诗', '爱国·家国情怀'],
     type: 'poem',
     tip: '《木兰诗》是北朝乐府民歌，中国古代最长的叙事诗之一。重点：互文修辞（"将军百战死，壮士十年归"）、详略得当（出征战斗略写，家庭情节详写）、排比夸张（"万里赴戎机，关山度若飞"）。',
@@ -893,6 +1154,7 @@ function markLearned(wordKey) {
     srsData[wordKey] = { interval: 1, ease: 2.5, reviews: 0, nextReview: Date.now() + 86400000 };
   }
   saveSRS();
+  recordActivity('read', currentArticle.id);
 }
 
 function getSRSProgress(wordKey) {
@@ -1044,15 +1306,19 @@ function formatDate(d) {
 function switchTab(tab) {
   activeTab = tab;
   document.querySelectorAll('.right-tab').forEach((el, i) => {
-    el.classList.toggle('active', ['word','practice','review'][i] === tab);
+    el.classList.toggle('active', ['word','practice','review','plan','stats'][i] === tab);
   });
   if (tab === 'word') {
     if (currentWord) showWord(currentWord);
     else showWordDefault();
   } else if (tab === 'practice') {
     showPractice();
-  } else {
+  } else if (tab === 'review') {
     showReview();
+  } else if (tab === 'plan') {
+    showPlan();
+  } else if (tab === 'stats') {
+    showStats();
   }
 }
 
@@ -1060,6 +1326,8 @@ function switchTab(tab) {
 function showPractice() {
   const p = currentArticle.practice;
   const wordsHtml = p.words.map(w => `<span class="req-word" id="rw-${w}">${w}</span>`).join('');
+  // upgrade word: pick the most "vivid" word from the article for upgrade challenge
+  const upgradeWord = currentArticle.upgradeWord || (currentArticle.practice.words[0]);
   document.getElementById('right-content').innerHTML = `
     <div class="practice-task">
       <div class="task-label">仿写任务 · ${currentArticle.title}</div>
@@ -1067,13 +1335,43 @@ function showPractice() {
       <div class="required-words">${wordsHtml}</div>
     </div>
     <textarea class="write-area" id="write-area" placeholder="在此写下你的仿写…" oninput="checkWords(this.value)"></textarea>
-    <button class="submit-btn" id="submit-btn" onclick="submitWriting()">检查仿写</button>
-    <div class="feedback" id="feedback"></div>
-    <div style="margin-top:12px;">
+    <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+      <button class="submit-btn" id="submit-btn" onclick="submitWriting()">检查仿写</button>
       <button class="submit-btn" style="background:transparent;color:var(--ink3);border:1px solid var(--border);font-size:12px;" onclick="showModelAnswer()">查看范文参考</button>
     </div>
+    <div class="feedback" id="feedback"></div>
     <div class="feedback" id="model-answer-box" style="background:var(--gold-light);border-color:rgba(184,134,11,0.2);display:none;"></div>
+
+    <div class="upgrade-section">
+      <div class="upgrade-label">⬆ 升级挑战（选做）</div>
+      <div class="upgrade-desc">把下面这个普通句子，改写成含有「<strong>${upgradeWord}</strong>」的生动版本：</div>
+      <div class="upgrade-original" id="upgrade-original">${currentArticle.upgradeBase || '树叶在风中摇动，发出声音。'}</div>
+      <textarea class="write-area" id="upgrade-area" placeholder="改写后的句子…" style="min-height:60px;margin-top:8px;font-size:14px;"></textarea>
+      <button class="submit-btn" style="margin-top:8px;font-size:12px;padding:6px 14px;" onclick="checkUpgrade()">检查改写</button>
+      <div class="feedback" id="upgrade-feedback" style="margin-top:8px;"></div>
+    </div>
   `;
+}
+
+function checkUpgrade() {
+  const text = document.getElementById('upgrade-area').value.trim();
+  const fb = document.getElementById('upgrade-feedback');
+  const upgradeWord = currentArticle.upgradeWord || currentArticle.practice.words[0];
+  if (!text) { fb.className = 'feedback error visible'; fb.innerHTML = '请先写下你的改写句子。'; return; }
+  const used = text.includes(upgradeWord);
+  const longer = text.length > (document.getElementById('upgrade-original').textContent.length);
+  let msg = '';
+  if (used && longer) {
+    msg = `✅ 很好！用上了「${upgradeWord}」，句子也更丰富了。这就是"表达升级"——同一件事，用不同的词说出更有画面感的效果。`;
+  } else if (used) {
+    msg = `📝 用上了「${upgradeWord}」，不错！试试看能不能再加一点细节，让读者更有画面感？`;
+  } else {
+    msg = `💡 试着把「${upgradeWord}」加进句子里——比如：把"摇动"换成"仿佛在低声交谈"，效果会完全不一样。`;
+  }
+  fb.className = 'feedback visible';
+  fb.innerHTML = msg;
+  // record upgrade attempt
+  recordActivity('upgrade', currentArticle.id);
 }
 
 function checkWords(text) {
@@ -1167,6 +1465,8 @@ function submitWriting() {
   fb.className = 'feedback visible';
   fb.innerHTML = '<div class="feedback-head">检查反馈</div>' + lines.join('<br>');
   btn.disabled = false;
+  // record writing activity
+  recordActivity('write', currentArticle.id, text.length);
 }
 
 // ─── REVIEW ─────────────────────────────────────────────────────────────────
@@ -1266,7 +1566,187 @@ function rateReview(ease) {
 }
 
 
-function switchMode(mode) {
+// ─── ACTIVITY LOG ────────────────────────────────────────────────────────────
+function recordActivity(type, articleId, chars) {
+  const log = JSON.parse(localStorage.getItem('activity_log') || '[]');
+  log.push({ type, articleId, chars: chars || 0, date: new Date().toDateString(), ts: Date.now() });
+  // keep last 200 entries
+  if (log.length > 200) log.splice(0, log.length - 200);
+  localStorage.setItem('activity_log', JSON.stringify(log));
+}
+
+function getActivityLog() {
+  return JSON.parse(localStorage.getItem('activity_log') || '[]');
+}
+
+// ─── WEEKLY PLAN ─────────────────────────────────────────────────────────────
+function showPlan() {
+  const log = getActivityLog();
+  const today = new Date().toDateString();
+  const todayLog = log.filter(e => e.date === today);
+
+  // figure out what day in the week cycle we're on (based on first activity or day 1)
+  const firstDate = log.length ? new Date(log[0].ts) : new Date();
+  const daysSinceStart = Math.floor((Date.now() - firstDate.getTime()) / 86400000);
+  const weekDay = (daysSinceStart % 7) + 1; // 1-7
+
+  const PLAN = [
+    { day: 1, icon: '📖', title: '输入日', desc: '选一篇课文，完整阅读全文。找出：描写了什么？用了哪些感官（视觉/听觉/触觉）？哪句在表达感受？', task: '阅读课文，至少点击 3 个高亮词汇查看释义', taskType: 'read' },
+    { day: 2, icon: '🔤', title: '词汇日', desc: '回到昨天读的课文，把你觉得好用的词加入词库。重点：这个词在其他文章里是怎么用的？', task: '加入至少 5 个词进词库，各看一遍语境', taskType: 'vocab' },
+    { day: 3, icon: '🏗️', title: '结构日', desc: '拆解段落结构：这段是"描写→感受"还是"总→分→总"？用铅笔在纸上画出段落的骨架。', task: '选一篇课文，在纸上画出段落结构图', taskType: 'read' },
+    { day: 4, icon: '✍️', title: '仿写日', desc: '核心任务！对照课文的结构和句式，写一段自己的文字（80-120字）。先写完，再检查词汇有没有用上。', task: '完成仿写并提交检查', taskType: 'write' },
+    { day: 5, icon: '⬆️', title: '升级日', desc: '变式训练：把一个普通句子改写成更生动的版本。比如加"仿佛"、加感官细节、加情感句。', task: '完成仿写页的"升级挑战"', taskType: 'upgrade' },
+    { day: 6, icon: '🏁', title: '整合日', desc: '本周成果：写一段完整描写（80-120字），要求：用到本周学的至少2个词，包含1个感官描写，结尾有感受句。', task: '完成本周最终仿写，字数≥80字', taskType: 'write' },
+    { day: 7, icon: '🔄', title: '复习日', desc: '间隔复习：把本周加入词库的词全部过一遍，按"困难/还好/轻松"评分，让系统安排下次复习时间。', task: '完成今日所有待复习词汇', taskType: 'review' },
+  ];
+
+  // check today's completion
+  const doneToday = {
+    read: todayLog.some(e => e.type === 'read'),
+    write: todayLog.some(e => e.type === 'write'),
+    upgrade: todayLog.some(e => e.type === 'upgrade'),
+    vocab: Object.keys(learnedWords).length > 0,
+    review: todayLog.some(e => e.type === 'review'),
+  };
+
+  // streak
+  const streak = parseInt(localStorage.getItem('streak_count') || '0');
+
+  // total words learned
+  const totalWords = Object.keys(learnedWords).length;
+  // total writings
+  const totalWrites = log.filter(e => e.type === 'write').length;
+  // total chars written
+  const totalChars = log.filter(e => e.type === 'write').reduce((s, e) => s + (e.chars || 0), 0);
+
+  const planItem = PLAN[weekDay - 1];
+  const isDone = doneToday[planItem.taskType];
+
+  const allDaysHtml = PLAN.map(p => {
+    const isToday = p.day === weekDay;
+    const isPast = p.day < weekDay;
+    const hadActivity = log.some(e => {
+      const d = Math.floor((Date.now() - new Date(log[0]?.ts || Date.now()).getTime()) / 86400000);
+      return e.type === p.taskType && Math.floor((Date.now() - e.ts) / 86400000) === (weekDay - p.day);
+    });
+    return `<div class="plan-day ${isToday ? 'today' : ''} ${isPast ? 'past' : ''}">
+      <span class="plan-day-num">Day ${p.day}</span>
+      <span class="plan-day-icon">${p.icon}</span>
+      <span class="plan-day-title">${p.title}</span>
+    </div>`;
+  }).join('');
+
+  document.getElementById('right-content').innerHTML = `
+    <div class="plan-stats">
+      <div class="plan-stat"><div class="plan-stat-n" style="color:var(--gold)">${streak}</div><div class="plan-stat-l">连续天</div></div>
+      <div class="plan-stat"><div class="plan-stat-n">${totalWords}</div><div class="plan-stat-l">词汇量</div></div>
+      <div class="plan-stat"><div class="plan-stat-n">${totalWrites}</div><div class="plan-stat-l">仿写次数</div></div>
+      <div class="plan-stat"><div class="plan-stat-n">${totalChars}</div><div class="plan-stat-l">累计写字</div></div>
+    </div>
+
+    <div class="plan-week">${allDaysHtml}</div>
+
+    <div class="plan-today">
+      <div class="plan-today-head">
+        <span>${planItem.icon} 今天 · Day ${weekDay} · ${planItem.title}</span>
+        ${isDone ? '<span class="plan-done-badge">✓ 已完成</span>' : ''}
+      </div>
+      <div class="plan-today-desc">${planItem.desc}</div>
+      <div class="plan-today-task">
+        <div class="plan-task-label">今日任务</div>
+        ${planItem.task}
+      </div>
+      <button class="submit-btn" style="margin-top:12px;font-size:12px;" onclick="switchTab('${
+        planItem.taskType === 'read' ? 'word' :
+        planItem.taskType === 'vocab' ? 'review' :
+        planItem.taskType === 'write' || planItem.taskType === 'upgrade' ? 'practice' : 'review'
+      }')">去完成任务 →</button>
+    </div>
+
+    <div class="plan-section-title">本周写作记录</div>
+    ${log.filter(e => e.type === 'write').length === 0
+      ? '<div style="font-size:13px;color:var(--ink3);padding:8px 0;">还没有写作记录，去仿写页完成第一次练习吧！</div>'
+      : log.filter(e => e.type === 'write').slice(-5).reverse().map(e => `
+        <div class="activity-item">
+          <span class="activity-dot"></span>
+          <span>完成仿写《${ARTICLES.find(a=>a.id===e.articleId)?.title||e.articleId}》</span>
+          <span class="activity-chars">${e.chars} 字</span>
+          <span class="activity-date">${e.date}</span>
+        </div>`).join('')
+    }
+  `;
+}
+
+// ─── STATS ───────────────────────────────────────────────────────────────────
+function showStats() {
+  const log = getActivityLog();
+  const totalWords = Object.keys(learnedWords).length;
+  const writes = log.filter(e => e.type === 'write');
+  const totalWrites = writes.length;
+  const totalChars = writes.reduce((s, e) => s + (e.chars || 0), 0);
+  const totalUpgrades = log.filter(e => e.type === 'upgrade').length;
+  const streak = parseInt(localStorage.getItem('streak_count') || '0');
+
+  // words by article
+  const wordsByArticle = {};
+  Object.keys(learnedWords).forEach(key => {
+    const [aid] = key.split('_');
+    wordsByArticle[aid] = (wordsByArticle[aid] || 0) + 1;
+  });
+
+  const articleRows = Object.entries(wordsByArticle).map(([aid, cnt]) => {
+    const a = ARTICLES.find(x => x.id === aid);
+    return `<div class="log-item">
+      <div class="log-item-title">《${a ? a.title : aid}》</div>
+      <div class="log-item-meta">已学 ${cnt} 个词汇</div>
+    </div>`;
+  }).join('') || '<div class="empty-log">还没有加入词汇，阅读课文后点击高亮词汇开始吧</div>';
+
+  // recent writings
+  const recentWrites = writes.slice(-6).reverse().map(e => {
+    const a = ARTICLES.find(x => x.id === e.articleId);
+    return `<div class="log-item">
+      <div class="log-item-title">仿写《${a ? a.title : e.articleId}》</div>
+      <div class="log-item-meta">${e.date} · ${e.chars} 字</div>
+    </div>`;
+  }).join('') || '<div class="empty-log">还没有仿写记录，去仿写页完成第一次练习吧！</div>';
+
+  // heatmap: last 28 days
+  const dayMap = {};
+  log.forEach(e => { dayMap[e.date] = (dayMap[e.date] || 0) + 1; });
+  const heatCells = Array.from({length: 28}, (_, i) => {
+    const d = new Date(Date.now() - (27 - i) * 86400000).toDateString();
+    const cnt = dayMap[d] || 0;
+    const bg = cnt === 0 ? 'var(--paper3)' : cnt < 3 ? '#a8d5b5' : cnt < 6 ? '#52b788' : '#1b7a4a';
+    return `<div style="width:14px;height:14px;border-radius:3px;background:${bg};title='${d}:${cnt}次'"></div>`;
+  }).join('');
+
+  document.getElementById('right-content').innerHTML = `
+    <div class="stats-panel">
+      <div class="stats-title">学习总览</div>
+      <div class="stats-grid">
+        <div class="stats-card"><div class="stats-num" style="color:var(--gold)">${streak}</div><div class="stats-lbl">连续学习天</div></div>
+        <div class="stats-card"><div class="stats-num">${totalWords}</div><div class="stats-lbl">词汇总量</div></div>
+        <div class="stats-card"><div class="stats-num" style="color:var(--green)">${totalWrites}</div><div class="stats-lbl">仿写次数</div></div>
+        <div class="stats-card"><div class="stats-num">${totalChars}</div><div class="stats-lbl">累计写字数</div></div>
+      </div>
+
+      <div class="stats-title" style="margin-top:4px;">最近 28 天活动</div>
+      <div style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:16px;">${heatCells}</div>
+      <div style="font-size:11px;color:var(--ink3);margin-bottom:16px;">每格代表一天，颜色越深表示学习次数越多</div>
+
+      <div class="stats-title">词汇进度（按课文）</div>
+      <div class="writing-log">${articleRows}</div>
+
+      <div class="stats-title" style="margin-top:12px;">最近仿写记录</div>
+      <div class="writing-log">${recentWrites}</div>
+
+      ${totalUpgrades > 0 ? `<div style="margin-top:12px;padding:10px 12px;background:var(--gold-light);border-radius:var(--radius);font-size:13px;color:var(--gold);">⬆ 已完成 ${totalUpgrades} 次升级挑战！</div>` : ''}
+    </div>
+  `;
+}
+
+
   document.querySelectorAll('.nav-btn').forEach((b,i) => b.classList.toggle('active', ['read','vocab'][i]===mode));
 }
 
